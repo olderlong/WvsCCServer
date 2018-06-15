@@ -13,7 +13,7 @@ class UDPEndPoint(threading.Thread):
 
         self.port = port
         self.udp_socket = self.init_socket(self.port)
-        if self.udp_socket == None:
+        if self.udp_socket is None:
             print("create socket error, port is used.")
         self.address = self.udp_socket.getsockname()
         self.ip = self.address[0]
