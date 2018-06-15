@@ -1,9 +1,8 @@
 #! /usr/bin/env python
 # _*_ coding:utf-8 _*_
 import json
-from app.lib import UDPEndPoint
-from app.lib import msg_bus, common_msg
-from .agent_state_manager import AgentStateMonitor
+from app.lib import UDPEndPoint, msg_bus, common_msg
+from app.server.agent_state_manager import AgentStateMonitor
 
 
 class CCServer(UDPEndPoint):
@@ -12,7 +11,6 @@ class CCServer(UDPEndPoint):
         self.agent_state_monitor = AgentStateMonitor()
 
         msg_bus.add_msg_listener(common_msg.MSG_SERVER_COMMAND, self.send_command)
-
         super(CCServer, self).__init__(port=port, handler=self.receive_data_handler)
 
     def receive_data_handler(self, data, address):
@@ -62,6 +60,7 @@ class CCServer(UDPEndPoint):
     def send_command(self, msg):
         command_json = msg.data
         for address in self.agent_list:
+            print(command_json, address)
             identifier = "[{}:{}]".format(address[0], address[1])
             if identifier in list(self.agent_state_monitor.agent_state_dict.keys()):
                 # print("in CCServer " + str(command_json))
@@ -73,3 +72,9 @@ class CCServer(UDPEndPoint):
             identifier = "[{}:{}]".format(address[0], address[1])
             if identifier in list(self.agent_state_monitor.agent_state_dict.keys()):
                 self.send_json_to(config_json, address)
+
+
+if __name__ == '__main__':
+    server = CCServer()
+    server.start()
+    server.stop()
