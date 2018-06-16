@@ -13,22 +13,10 @@ command = {
     }
 }
 
-def listener(msg):
-    print(time.time())
-    json_obj = msg.data
-    print(json_obj)
 
 
 if __name__ == '__main__':
-    msg_bus.add_msg_listener(common_msg.MSG_SERVER_COMMAND, listener)
 
-    time.sleep(1)
-
-    common_msg.msg_server_command.data = command
-    # for _ in range(10):
-    #     msg_bus.send_msg(common_msg.msg_server_command)
-    #
-    # time.sleep(5)
 
     server = CCServer()
     server.start()
@@ -41,14 +29,25 @@ if __name__ == '__main__':
             "Action": "StartNewScan",
             "Config": {  # 可选，当命令为StartNewScan时需提供该字段作为扫描参数
                 "StartURL": "http://192.168.3.10",
-                "ScanPolicy": "Normal"
+                "ScanPolicy": "Full"
             }
         }
     }
-    time.sleep(15)
+    time.sleep(10)
     common_msg.msg_server_command.data = command
     # print("in run_server " + str(agent_event.event_wvs_command.dict))
     msg_bus.send_msg(common_msg.msg_server_command)
 
-    time.sleep(50)
-    server.stop()
+    time.sleep(60)
+    stop_scan_cmd = {
+        "Type": "WVSCommand",
+        "Data": {
+            "Action": "StopScan",
+        }
+    }
+    common_msg.msg_server_command.data = stop_scan_cmd
+    # print("in run_server " + str(agent_event.event_wvs_command.dict))
+    msg_bus.send_msg(common_msg.msg_server_command)
+
+    server.join()
+    # server.stop()
