@@ -1,9 +1,12 @@
 #! /usr/bin/env python
 # _*_ coding:utf-8 _*_
 import time
+import logging
 
-#状态更新时间间隔5秒
+
+# 状态更新时间间隔5秒
 STATE_UPDATE_INTERVAL = 5
+logger = logging.getLogger("Server")
 
 
 class AgentState(object):
@@ -32,7 +35,8 @@ class AgentState(object):
         self.state = state
 
     def print_state(self):
-        print("Agent {}{} is {} at {}".format(self.name, self.agent_identifier, self.state, self.timestamp))
+        logger.info("Agent {}{} is {} at {}".format(self.name, self.agent_identifier, self.state, self.timestamp))
+        # print("Agent {}{} is {} at {}".format(self.name, self.agent_identifier, self.state, self.timestamp))
 
 
 
