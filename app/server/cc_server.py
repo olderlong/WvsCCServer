@@ -1,8 +1,10 @@
 #! /usr/bin/env python
 # _*_ coding:utf-8 _*_
-import json
+import json, logging
 from app.lib import UDPEndPoint, msg_bus, common_msg
 from app.server.agent_state_manager import AgentStateMonitor
+
+logger = logging.getLogger("Server")
 
 
 class CCServer(UDPEndPoint):
@@ -26,12 +28,13 @@ class CCServer(UDPEndPoint):
                 # self.heartbeat_handle(data)
             elif pkg_obj["Type"] == "WVSState":
                 common_msg.msg_wvs_state.data = pkg_obj["Data"]
-                msg_bus.send_event(common_msg.msg_wvs_state)
+                msg_bus.send_msg(common_msg.msg_wvs_state)
+                logger.info(common_msg.msg_wvs_state.data)
                 # print("收到代理{}的漏扫状态数据".format(address))
 
             elif pkg_obj["Type"] == "ScanResult":
                 common_msg.msg_scan_result_receive.data = pkg_obj["Data"]
-                msg_bus.send_event(common_msg.msg_scan_result_receive)
+                msg_bus.send_msg(common_msg.msg_scan_result_receive)
                 self.__print_scan_result(pkg_obj["Data"])
             else:
                 print("收到来自{}的未知类型数据".format(address))
@@ -60,7 +63,6 @@ class CCServer(UDPEndPoint):
     def send_command(self, msg):
         command_json = msg.data
         for address in self.agent_list:
-            print(command_json, address)
             identifier = "[{}:{}]".format(address[0], address[1])
             if identifier in list(self.agent_state_monitor.agent_state_dict.keys()):
                 # print("in CCServer " + str(command_json))
