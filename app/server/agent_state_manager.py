@@ -2,11 +2,12 @@
 # _*_ coding:utf-8 _*_
 import threading
 import time
+import logging
 from app.server import STATE_UPDATE_INTERVAL, AgentState
 from app.server import *
 from app.lib import msg_bus, common_msg
 
-
+logger = logging.getLogger("Server")
 def singleton(cls):
     _instance = {}
 
@@ -33,6 +34,7 @@ class AgentStateMonitor(object):
         state_data = msg.data
         agent_state = AgentState()
         agent_state.gen_from_json_obj(state_data)
+        agent_state.timestamp = time.time()
         # self.update_agent_state(agent_state)
         self.agent_state_dict[agent_state.agent_identifier] = agent_state
 
@@ -55,7 +57,7 @@ class AgentStateMonitor(object):
                 for agent_state in list(self.agent_state_dict.values()):
                     new_state = self.__check_state(agent_state)
                     if new_state == "Dead":
-                        print("Agent {0} is dead.\nAgent {1} is removed.".format(
+                        logger.info("Agent {0} is dead.\nAgent {1} is removed.".format(
                             agent_state.agent_identifier,
                             agent_state.agent_identifier))
 
