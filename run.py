@@ -40,12 +40,12 @@ if __name__ == '__main__':
         "Data": {
             "Action": "StartNewScan",
             "Config": {  # 可选，当命令为StartNewScan时需提供该字段作为扫描参数
-                "StartURL": "http://www.cnblog.com",
+                "StartURL": "http://192.168.3.10",
                 "ScanPolicy": "Normal"
             }
         }
     }
-    time.sleep(20)
+    time.sleep(15)
     common_msg.msg_server_command.data = command
     # print("in run_server " + str(agent_event.event_wvs_command.dict))
     msg_bus.send_msg(common_msg.msg_server_command)
