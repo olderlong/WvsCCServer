@@ -45,9 +45,9 @@ if __name__ == '__main__':
             "Action": "StopScan",
         }
     }
-    common_msg.msg_server_command.data = stop_scan_cmd
-    # print("in run_server " + str(agent_event.event_wvs_command.dict))
-    msg_bus.send_msg(common_msg.msg_server_command)
+    # common_msg.msg_server_command.data = stop_scan_cmd
+    # # print("in run_server " + str(agent_event.event_wvs_command.dict))
+    # msg_bus.send_msg(common_msg.msg_server_command)
 
     server.join()
     # server.stop()
