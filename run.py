@@ -16,8 +16,6 @@ command = {
 
 
 if __name__ == '__main__':
-
-
     server = CCServer()
     server.start()
     agent_state_monitor = AgentStateMonitor()
@@ -33,9 +31,9 @@ if __name__ == '__main__':
             }
         }
     }
-    time.sleep(10)
+    time.sleep(20)
     common_msg.msg_server_command.data = command
-    # print("in run_server " + str(agent_event.event_wvs_command.dict))
+    print("in run_server " + str(common_msg.msg_server_command.data))
     msg_bus.send_msg(common_msg.msg_server_command)
 
     time.sleep(60)
