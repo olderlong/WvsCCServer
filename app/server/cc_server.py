@@ -62,10 +62,11 @@ class CCServer(UDPEndPoint):
 
     def send_command(self, msg):
         command_json = msg.data
+        # print("in CCServer " + str(command_json))
+        # print(self.agent_list)
         for address in self.agent_list:
             identifier = "[{}:{}]".format(address[0], address[1])
             if identifier in list(self.agent_state_monitor.agent_state_dict.keys()):
-                # print("in CCServer " + str(command_json))
                 self.send_json_to(command_json, address)
 
     def send_config(self, msg):
