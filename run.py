@@ -14,7 +14,6 @@ command = {
 }
 
 
-
 if __name__ == '__main__':
     server = CCServer()
     server.start()
@@ -26,7 +25,8 @@ if __name__ == '__main__':
         "Data": {
             "Action": "StartNewScan",
             "Config": {  # 可选，当命令为StartNewScan时需提供该字段作为扫描参数
-                "StartURL": "http://192.168.3.10",
+                # "StartURL": "http://192.168.1.28",
+                "StartURL": "http://demo.testfire.net",
                 "ScanPolicy": "Full"
             }
         }

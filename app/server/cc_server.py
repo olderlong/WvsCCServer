@@ -8,7 +8,7 @@ logger = logging.getLogger("Server")
 
 
 class CCServer(UDPEndPoint):
-    def __init__(self, port=6666):
+    def __init__(self, port=6000):
         self.agent_list = []
         self.agent_state_monitor = AgentStateMonitor()
 

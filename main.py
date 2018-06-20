@@ -1,6 +1,6 @@
-import time
-from app.lib import *
-import app.cli_ui as cli_app
+# import time
+# from app.lib import *
+from app.cli_ui import CliApp
 import app.web_ui
 
 command = {
@@ -8,7 +8,7 @@ command = {
     "Data": {
         "Action": "StartNewScan",
         "Config": {  # 可选，当命令为StartNewScan时需提供该字段作为扫描参数
-            "StartURL": "http://192.168.3.10",
+            "StartURL":  "http://demo.testfire.net",
             "ScanPolicy": "Full"
         }
     }
@@ -22,15 +22,12 @@ stop_scan_cmd = {
 
 
 if __name__ == '__main__':
-    cli_app.run()
+    # CliApp.run() # 类的静态方法在导入时已经调用
 
-    app.web_ui.app.run()
-    time.sleep(10)
-    common_msg.msg_server_command.data = command
-    # print("in run_server " + str(agent_event.event_wvs_command.dict))
-    msg_bus.send_msg(common_msg.msg_server_command)
-
-    time.sleep(60)
-
-    # common_msg.msg_server_command.data = stop_scan_cmd
+    # time.sleep(10)
+    # common_msg.msg_server_command.data = command
+    # # print("in run_server " + str(agent_event.event_wvs_command.dict))
     # msg_bus.send_msg(common_msg.msg_server_command)
+
+    app.web_ui.app.run(port=80)
+
