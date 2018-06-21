@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h3>{{ message }}</h3>
+<div class="content-row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <b>系统配置</b>
+            </div>
+            <div class="panel-options">
+                <a class="bg" data-target="#sample-modal-dialog-1" data-toggle="modal" href="#sample-modal"><i class="entypo-cog"></i></a>
+                <a data-rel="collapse" href="#"><i class="entypo-down-open"></i></a>
+                <a data-rel="close" href="#!/tasks" ui-sref="Tasks"><i class="entypo-cancel"></i></a>
+            </div>
+        </div>
+        <div class="panel-body">
+              <form role="form" name="CCServerSetting" action="/server_setting", method="POST">
+                  {{ CCServerSettingForm.hidden_tag() }}
+                  <div class="form-group" >
+                      {{CCServerSettingForm.CCServerIP.label}}
+                      {{CCServerSettingForm.CCServerIP(class="form-control", id="CCServerIP", placeholder="127.0.0.1",disabled="true")}}
+                      <!--<label >控制中心IP</label>-->
+                      <!--<input name="CCServerIP" class="form-control" id="CCServerIP" placeholder="127.0.0.1">-->
+                  </div>
+                  <div class="form-group">
+                      {{CCServerSettingForm.CCServerPort.label}}
+                      {{CCServerSettingForm.CCServerPort(class="form-control", id="CCServerPort", placeholder="6000",disabled="true")}}
+                      <!--<label >控制中心监听端口</label>-->
+                      <!--<input  name="CCServerPort" class="form-control" id="CCServerPort" placeholder="6000">-->
+                  </div>
+                  <!--<div class="form-group">-->
+                      <!--<label >控制中心监听端口</label>-->
+                      <!--<input  class="form-control" placeholder="6000" disabled="true">-->
+                  <!--</div>-->
+                  <div class="form-group">
+                      {{CCServerSettingForm.CCProtocol.label}}
+                      {{CCServerSettingForm.CCProtocol(class="form-control",disabled="true")}}
+
+                      <!--<label >通信协议</label>-->
+                      <!--<select name="CCProtocol" class="form-control" data-selecter-options="{&quot;cover&quot;:&quot;true&quot;}" tabindex="TCP">-->
+                          <!--<option value="UDP">UDP</option>-->
+                          <!--<option value="TCP">TCP</option>-->
+                      <!--</select>-->
+                  </div>
+                  {{ CCServerSettingForm.submit_start(class="btn btn-default") }}<span>     </span>{{ CCServerSettingForm.submit_stop(class="btn btn-default") }}
+                  <!--<button type="submit" class="btn btn-default">启动控制服务器</button>-->
+              </form>
+        </div>
+    </div>
+</div>
+<div class="content-row">
+    <div class="panel panel-default">
+        <div class="panel-heading ">
+            <div class="panel-title">
+                <b>扫描配置</b>
+            </div>
+
+            <div class="panel-options">
+                <a class="bg" data-target="#sample-modal-dialog-1" data-toggle="modal" href="#sample-modal"><i class="entypo-cog"></i></a>
+                <a data-rel="collapse" href="#"><i class="entypo-down-open"></i></a>
+                <a data-rel="close" href="#!/tasks" ui-sref="Tasks"><i class="entypo-cancel"></i></a>
+            </div>
+        </div>
+        <div class="panel panel-body">
+              <form role="form" action="/scan_setting", method="POST">
+                  {{ CCServerSettingForm.hidden_tag() }}
+                  <div class="form-group">
+                      {{ScanSettingForm.StartURL.label}}
+                      {{ScanSettingForm.StartURL(class="form-control",id="StartURL",placeholder="http://www.example.com")}}
+                      <!--<label >起始URL</label>-->
+                      <!--<input class="form-control" id="StartURL" placeholder="http://www.example.com">-->
+                  </div>
+                  <div class="form-group">
+                      {{ScanSettingForm.ScanPolicy.label}}
+                      {{ScanSettingForm.ScanPolicy(class="form-control")}}
+                      <!--<label >扫描策略</label>-->
+                      <!--<select name="policy" class="form-control" data-selecter-options="{&quot;cover&quot;:&quot;true&quot;}" tabindex="1">-->
+                          <!--<option value="1">Normal</option>-->
+                          <!--<option value="2">Quick</option>-->
+                          <!--<option value="3">Full</option>-->
+                      <!--</select>-->
+                  </div>
+                  {{ ScanSettingForm.submit(class="btn btn-default") }}
+                  <!--<button name="submit" type="submit" class="btn btn-default">确定</button>-->
+              </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
