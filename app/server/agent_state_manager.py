@@ -44,8 +44,11 @@ class AgentStateMonitor(object):
 
     def start_monitor(self):
         self.__running.set()
-        self.__state_monitor_thread.daemon = True
-        self.__state_monitor_thread.start()
+        if self.__state_monitor_thread.is_alive():
+            pass
+        else:
+            self.__state_monitor_thread.daemon = True
+            self.__state_monitor_thread.start()
 
     def stop_monitor(self):
         self.__running.clear()
