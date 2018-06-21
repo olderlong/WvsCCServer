@@ -8,16 +8,16 @@ import json
 
 
 class UDPEndPoint(threading.Thread):
-    def __init__(self, port=8888, handler=None):
+    def __init__(self, ip=None, port=6000, handler=None):
         self.buff_size = 4096
         self.handler = handler
+        self.ip = ip
 
         self.port = port
         self.udp_socket = self.init_socket(self.port)
         if self.udp_socket is None:
             print("create socket error, port is used.")
         self.address = self.udp_socket.getsockname()
-        self.ip = self.address[0]
         self.__running = threading.Event()  # 用于停止线程的标识
         super(UDPEndPoint, self).__init__()
 
@@ -42,7 +42,8 @@ class UDPEndPoint(threading.Thread):
 
     def init_socket(self, port):
         try:
-            self.ip = self.get_host_ip()
+            if self.ip is None:
+                self.ip = self.get_host_ip()
             self.address = (self.ip, self.port)
 
             udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
