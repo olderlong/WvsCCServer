@@ -22,5 +22,4 @@ def start_scan():
     msg_bus.send_msg(common_msg.msg_server_command)
 
 def index():
-    start_scan()
     return render_template("index.html",title="")
