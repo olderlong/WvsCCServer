@@ -6,6 +6,7 @@ from flask import render_template
 from flask_socketio import SocketIO, emit
 from app.web_ui import socketio
 from app.lib import msg_bus, common_msg
+from app.web_ui.serverconfig import ScanSetting
 
 
 logger = logging.getLogger("Server")
@@ -75,3 +76,39 @@ def ws_wvs_state_connect():
     #               },
     #               namespace="/wvs_state_ns"
     #               )
+
+
+@socketio.on("connect", namespace="/wvs_scan")
+def wvs_scan_connect():
+    logger.info("Wvs scan websocket is connected")
+
+
+@socketio.on("wvs_scan_control", namespace="/wvs_scan")
+def wvs_scan_control(data):
+    command = data.get("Command")
+    logger.info("Start scan with config: {}".format(command))
+    if command == "start":
+        setting = ScanSetting()
+        start_scan_cmd = {
+            "Type": "WVSCommand",
+            "Data": {
+                "Action": "StartNewScan",
+                "Config": {  # 可选，当命令为StartNewScan时需提供该字段作为扫描参数
+                    "StartURL": setting.start_url,
+                    "ScanPolicy": setting.scan_policy
+                }
+            }
+        }
+        common_msg.msg_server_command.data = start_scan_cmd
+        msg_bus.send_msg(common_msg.msg_server_command)
+        logger.info("Start scan with config: {}".format(start_scan_cmd))
+    elif command is "stop":
+        stop_scan_cmd = {
+            "Type": "WVSCommand",
+            "Data": {
+                "Action": "StopScan",
+            }
+        }
+        common_msg.msg_server_command.data = stop_scan_cmd
+        msg_bus.send_msg(common_msg.msg_server_command)
+        logger.info("Start scan")
