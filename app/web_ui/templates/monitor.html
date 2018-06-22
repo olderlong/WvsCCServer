@@ -5,29 +5,123 @@
 <h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
 <script>
-    data = {
-        "Name": "AppscanAgent",
-        "AgentIP": "127.0.0.1",
-        "AgentPort": 5000,
-        "Time": "1271231231.100",
-        "State": "Online"
+    function start_agent_state_update(){
+        namespace = "/agent_state_ns";
+        var socket = io.connect(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        console.log(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        socket.on("agent_state_update", function(agent_state_json){
+            console.log(agent_state_json);
+            update_agent_state(agent_state_json)
+        })
     }
-    var add_wvs_agent_state = function (data) {
-        var newstate = "<tr id='"+data["Name"] +"'>\n" +
+    function start_wvs_state_update(){
+        namespace = "/wvs_state_ns";
+        var socket = io.connect(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        console.log(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        socket.on("wvs_state_update", function(wvs_state_json){
+            console.log(wvs_state_json);
+            update_wvs_state(wvs_state_json)
+        })
+    }
+    function get_time_str(f_seconds) {
+        var d = new Date();
+        d.setTime(Math.floor(f_seconds*1000));
+        var time_str = d.getFullYear().toString() + "/"
+            +d.getMonth().toString()+ "/"
+            +d.getDate().toString()+ " "
+            +d.getHours().toString()+ ":"
+            +d.getMinutes().toString()+ ":"
+            +d.getSeconds().toString()+ "::"
+            +d.getMilliseconds().toString()
+        return   time_str
+    }
+    var update_agent_state = function (data) {
+        var tr_id = "Agent_"+data["Name"]+"_"+data["Address"][0]
+        if($("tr[id='"+tr_id+"']").length>0){
+            console.log("is exist")
+
+            var selector = "tr[id='"+tr_id+"']" + "> td:nth-child(4)"
+            // $(selector).text( data["Timestamp"].toString())
+            $(selector).text( get_time_str(data["Timestamp"]))
+
+            var selector ="tr[id='"+tr_id+"']" + "> td:nth-child(5)"
+            $(selector).text( data["State"].toString())
+
+            if (data["State"]=="Offline")
+                $("tr[id='"+tr_id+"']").attr("class","warning")
+            else if(data["State"]=="Online")
+                $("tr[id='"+tr_id+"']").attr("class","active")
+            else if(data["State"]=="Dead")
+                $("tr[id='"+tr_id+"']").attr("class","danger")
+            else
+                $("tr[id='"+tr_id+"']").attr("class","info")
+        }
+        else{
+            add_agent_state(data)
+        }
+    }
+
+    var add_agent_state = function (data) {
+        var tr_id = "Agent_"+ data["Name"]+"_"+data["Address"][0]
+
+        var newstate = "<tr id='"+tr_id +"'>\n" +
             " <td>"+data["Name"] +"</td>\n" +
-            "  <td>"+ data["AgentIP"] +"</td>\n" +
-            " <td>"+ data["AgentPort"] +"</td>\n" +
-            " <td>"+ data["Time"] +"</td>\n" +
+            "  <td>"+ data["Address"][0] +"</td>\n" +
+            " <td>"+ data["Address"][1] +"</td>\n" +
+            " <td>"+ get_time_str(data["Timestamp"]) +"</td>\n" +
             " <td>"+ data["State"] +"</td>\n" +
             " </tr>"
-        var tr_id = data["Name"]
+
         $("tbody#agent_state_table_body").append(newstate);
-        $("tr[id='"+tr_id+"']").addClass("danger")
+
+        if (data["State"]=="Offline")
+            $("tr[id='"+tr_id+"']").addClass("warning")
+        else if(data["State"]=="Online")
+            $("tr[id='"+tr_id+"']").addClass("active")
+        else if(data["State"]=="Dead")
+            $("tr[id='"+tr_id+"']").addClass("danger")
+        else
+            $("tr[id='"+tr_id+"']").addClass("info")
+    }
+    var update_wvs_state = function(data){
+        var tr_id = "WVS_"+ data["Name"]+"_"+data["Address"][0]
+        if($("tr[id='"+tr_id+"']").length>0){
+            console.log("is exist")
+
+            var selector = "tr[id='"+tr_id+"']" + "> td:nth-child(4)"
+            // $(selector).text( data["Timestamp"].toString())
+            $(selector).text( get_time_str(data["Timestamp"]))
+
+            var selector ="tr[id='"+tr_id+"']" + "> td:nth-child(5)"
+            $(selector).text( data["State"].toString())
+        }
+        else{
+            add_wvs_state(data)
+        }
+    }
+    var add_wvs_state = function(data){
+        var tr_id = "WVS_"+  data["Name"]+"_"+data["Address"][0]
+
+        var newstate = "<tr id='"+tr_id +"'>\n" +
+            " <td>"+data["Name"] +"</td>\n" +
+            "  <td>"+ data["Address"][0] +"</td>\n" +
+            " <td>"+ data["Address"][1] +"</td>\n" +
+            " <td>"+ get_time_str(data["Timestamp"]) +"</td>\n" +
+            " <td>"+ data["State"] +"</td>\n" +
+            " </tr>"
+
+        $("tbody#wvs_state_table_body").append(newstate);
+        $("tr[id='"+tr_id+"']").addClass("active")
     }
     $(document).ready(function(){
-        add_wvs_agent_state(data)
+        start_agent_state_update()
+        start_wvs_state_update()
+        // add_wvs_agent_state(data)
     });
+
+
 </script>
+
 <div class="row">
     <div class="col-lg-6">
         <!-- col-lg-6 start here -->
