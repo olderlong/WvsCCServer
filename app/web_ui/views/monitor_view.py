@@ -6,7 +6,7 @@ from flask import render_template
 from flask_socketio import SocketIO, emit
 from app.web_ui import socketio
 from app.lib import msg_bus, common_msg
-from app.web_ui.serverconfig import ScanSetting
+from app.web_ui.serverconfig import ScanSetting, ServerConfig
 
 
 logger = logging.getLogger("Server")
