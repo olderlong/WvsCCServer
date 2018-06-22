@@ -30,6 +30,14 @@ class AgentState(object):
         self.agent_identifier = "[{}:{}]".format(self.address[0], self.address[1])
         # self.agent_identifier = "{}[{}:{}]".format(self.name, self.address[0], self.address[1])
 
+    def gen_json_object(self):
+        res = {}
+        res["Name"] = self.name
+        res["Address"] = self.address
+        res["Timestamp"] = self.timestamp
+        res["State"] = self.state
+        return res
+
     def update_state(self, timestamp, state):
         self.timestamp = timestamp
         self.state = state
