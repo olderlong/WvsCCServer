@@ -1,22 +1,23 @@
 #! /usr/bin/env python
 # _*_coding:utf-8 -*_
 import socket
+import psutil
 import time
 import threading
 import json
 
 
 class UDPEndPoint(threading.Thread):
-    def __init__(self, port=8888, handler=None):
+    def __init__(self, ip=None, port=6000, handler=None):
         self.buff_size = 4096
         self.handler = handler
+        self.ip = ip
 
         self.port = port
         self.udp_socket = self.init_socket(self.port)
         if self.udp_socket is None:
             print("create socket error, port is used.")
         self.address = self.udp_socket.getsockname()
-        self.ip = self.address[0]
         self.__running = threading.Event()  # 用于停止线程的标识
         super(UDPEndPoint, self).__init__()
 
@@ -41,11 +42,12 @@ class UDPEndPoint(threading.Thread):
 
     def init_socket(self, port):
         try:
+            if self.ip is None:
+                self.ip = self.get_host_ip()
+            self.address = (self.ip, self.port)
+
             udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            host = socket.gethostname()
-            udp_socket.bind((host, port))
-            # self.address = (self.ip, self.port)
-            # udp_socket.bind(self.address)
+            udp_socket.bind(self.address)
             return udp_socket
         except Exception as e:
             print(e)
@@ -60,6 +62,19 @@ class UDPEndPoint(threading.Thread):
         if self.udp_socket.fileno() > 0:
             self.udp_socket.sendto(bytes(json_str, 'utf-8'), address)
 
+    def get_host_ip(self):
+        """
+        获取以太网eth的ip地址
+        :return:
+        """
+        info = psutil.net_if_addrs()
+        for k, v in info.items():
+            if str(k).startswith("以太网") or str(k).startswith("eth"):
+                for item in v:
+                    if item[0] == 2 and not item[1] == '127.0.0.1':
+                        return item[1]
+            else:
+                return "127.0.0.1"
 
 
 class Test(object):

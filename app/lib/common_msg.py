@@ -20,8 +20,12 @@ class CommonMsg(object):
         self.MSG_HEARTBEAT = "Heartbeat"
         self.msg_heartbeat = Message(subject=self.MSG_HEARTBEAT)
 
+        self.MSG_AGENT_STATE_UPDATE = "AgentStateUpdate"
+        self.msg_agent_state_update = Message(subject=self.MSG_AGENT_STATE_UPDATE)
+
         self.MSG_WVS_STATE = "WVSState"
         self.msg_wvs_state = Message(subject=self.MSG_WVS_STATE)
+
         self.MSG_WVS_RESULT_RECEIVE = "ScanResultReceive"
         self.msg_scan_result_receive = Message(subject=self.MSG_WVS_RESULT_RECEIVE)
 

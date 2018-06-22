@@ -44,8 +44,11 @@ class AgentStateMonitor(object):
 
     def start_monitor(self):
         self.__running.set()
-        self.__state_monitor_thread.daemon = True
-        self.__state_monitor_thread.start()
+        if self.__state_monitor_thread.is_alive():
+            pass
+        else:
+            self.__state_monitor_thread.daemon = True
+            self.__state_monitor_thread.start()
 
     def stop_monitor(self):
         self.__running.clear()
@@ -61,11 +64,18 @@ class AgentStateMonitor(object):
                             agent_state.agent_identifier,
                             agent_state.agent_identifier))
 
+                        agent_state.state = new_state
+                        common_msg.msg_agent_state_update.data = agent_state.gen_json_object()
+
                         self.agent_state_dict.pop(agent_state.agent_identifier)
                     else:
                         agent_state.state = new_state
-                        agent_state.print_state()
                         self.agent_state_dict[agent_state.agent_identifier] = agent_state
+
+                        common_msg.msg_agent_state_update.data = agent_state.gen_json_object()
+                        msg_bus.send_msg(common_msg.msg_agent_state_update)
+                        time.sleep(1)
+
             time.sleep(STATE_UPDATE_INTERVAL)
 
     def __check_state(self, agent_state):

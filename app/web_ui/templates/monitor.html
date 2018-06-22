@@ -1,0 +1,354 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}.</h2>
+<h3>{{ message }}</h3>
+<script>
+    function start_agent_state_update(){
+        namespace = "/agent_state_ns";
+        var socket = io.connect(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        console.log(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        socket.on("agent_state_update", function(agent_state_json){
+            console.log(agent_state_json);
+            update_agent_state(agent_state_json)
+        })
+    }
+    function start_wvs_state_update(){
+        namespace = "/wvs_state_ns";
+        var socket = io.connect(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        console.log(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        socket.on("wvs_state_update", function(wvs_state_json){
+            console.log(wvs_state_json);
+            update_wvs_state(wvs_state_json)
+        })
+    }
+    function get_time_str(f_seconds) {
+        var d = new Date();
+        d.setTime(Math.floor(f_seconds*1000));
+        var time_str = d.getFullYear().toString() + "/"
+            +d.getMonth().toString()+ "/"
+            +d.getDate().toString()+ " "
+            +d.getHours().toString()+ ":"
+            +d.getMinutes().toString()+ ":"
+            +d.getSeconds().toString()+ "::"
+            +d.getMilliseconds().toString()
+        return   time_str
+    }
+    var update_agent_state = function (data) {
+        var tr_id = "Agent_"+data["Name"]+"_"+data["Address"][0]
+        if($("tr[id='"+tr_id+"']").length>0){
+            console.log("is exist")
+
+            var selector = "tr[id='"+tr_id+"']" + "> td:nth-child(4)"
+            // $(selector).text( data["Timestamp"].toString())
+            $(selector).text( get_time_str(data["Timestamp"]))
+
+            var selector ="tr[id='"+tr_id+"']" + "> td:nth-child(5)"
+            $(selector).text( data["State"].toString())
+
+            if (data["State"]=="Offline")
+                $("tr[id='"+tr_id+"']").attr("class","warning")
+            else if(data["State"]=="Online")
+                $("tr[id='"+tr_id+"']").attr("class","active")
+            else if(data["State"]=="Dead")
+                $("tr[id='"+tr_id+"']").attr("class","danger")
+            else
+                $("tr[id='"+tr_id+"']").attr("class","info")
+        }
+        else{
+            add_agent_state(data)
+        }
+    }
+
+    var add_agent_state = function (data) {
+        var tr_id = "Agent_"+ data["Name"]+"_"+data["Address"][0]
+
+        var newstate = "<tr id='"+tr_id +"'>\n" +
+            " <td>"+data["Name"] +"</td>\n" +
+            "  <td>"+ data["Address"][0] +"</td>\n" +
+            " <td>"+ data["Address"][1] +"</td>\n" +
+            " <td>"+ get_time_str(data["Timestamp"]) +"</td>\n" +
+            " <td>"+ data["State"] +"</td>\n" +
+            " </tr>"
+
+        $("tbody#agent_state_table_body").append(newstate);
+
+        if (data["State"]=="Offline")
+            $("tr[id='"+tr_id+"']").addClass("warning")
+        else if(data["State"]=="Online")
+            $("tr[id='"+tr_id+"']").addClass("active")
+        else if(data["State"]=="Dead")
+            $("tr[id='"+tr_id+"']").addClass("danger")
+        else
+            $("tr[id='"+tr_id+"']").addClass("info")
+    }
+    var update_wvs_state = function(data){
+        var tr_id = "WVS_"+ data["Name"]+"_"+data["Address"][0]
+        if($("tr[id='"+tr_id+"']").length>0){
+            console.log("is exist")
+
+            var selector = "tr[id='"+tr_id+"']" + "> td:nth-child(4)"
+            // $(selector).text( data["Timestamp"].toString())
+            $(selector).text( get_time_str(data["Timestamp"]))
+
+            var selector ="tr[id='"+tr_id+"']" + "> td:nth-child(5)"
+            $(selector).text( data["State"].toString())
+        }
+        else{
+            add_wvs_state(data)
+        }
+    }
+    var add_wvs_state = function(data){
+        var tr_id = "WVS_"+  data["Name"]+"_"+data["Address"][0]
+
+        var newstate = "<tr id='"+tr_id +"'>\n" +
+            " <td>"+data["Name"] +"</td>\n" +
+            "  <td>"+ data["Address"][0] +"</td>\n" +
+            " <td>"+ data["Address"][1] +"</td>\n" +
+            " <td>"+ get_time_str(data["Timestamp"]) +"</td>\n" +
+            " <td>"+ data["State"] +"</td>\n" +
+            " </tr>"
+
+        $("tbody#wvs_state_table_body").append(newstate);
+        $("tr[id='"+tr_id+"']").addClass("active")
+    }
+
+    var start_scan = function(){
+        console.log("Scan started")
+        $('button[id="btn_start_scan"]').attr("disabled","true")
+        $('button[id="btn_stop_scan"]').removeAttr("disabled")
+        ws_send_scan_control("start")
+    }
+    var stop_scan = function(){
+        var ret = confirm("是否停止？");
+        if (ret==true){
+            console.log("Scan stopped")
+            $('button[id="btn_start_scan"]').removeAttr("disabled")
+            $('button[id="btn_stop_scan"]').attr("disabled","true")
+            ws_send_scan_control("stop")
+        }
+    }
+    function ws_send_scan_control(command){
+        namespace = "/wvs_scan";
+        var socket = io.connect(location.protocol+"//"+document.domain + ":" + location.port + namespace);
+        console.log(location.protocol+"//"+document.domain + ":" + location.port + namespace)
+
+        socket.emit('wvs_scan_control',{'Command':command});
+        // socket.close()
+    }
+    $(document).ready(function(){
+        start_agent_state_update()
+        start_wvs_state_update()
+        // add_wvs_agent_state(data)
+    });
+
+
+</script>
+
+<div class="row">
+    <div class="col-lg-6">
+        <!-- col-lg-6 start here -->
+        <div class="panel panel-info toggle panelRefresh" id="spr_6">
+            <!-- Start .panel -->
+            <div class="panel-heading">
+                <h4 class="panel-title">系统参数</h4>
+                <div class="panel-controls panel-controls-hide" style="display: none;">
+                    <a href="#" class="panel-refresh"><i class="im-spinner6"></i></a>
+                    <a href="#" class="toggle panel-minimize"><i class="im-minus"></i></a>
+                </div>
+            </div>
+            <div class="panel-body"  style="margin: 0px; padding: 0px;">
+                <form action="#" class="form-horizontal">
+                    <div class="form-group" style="margin: 0px; padding: 0px;">
+                        <label class="col-lg-4 control-label">控制中心IP</label>
+                        <div class="col-lg-8">
+                            <label class="col-lg-8 control-label">192.168.1.31</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin: 0px; padding: 0px;">
+                        <label class="col-lg-4 control-label">控制中心监听端口</label>
+                        <div class="col-lg-8">
+                            <label class="col-lg-8 control-label">6000</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin: 0px; padding: 0px;">
+                        <label class="col-lg-4 control-label">通信协议</label>
+                        <div class="col-lg-8">
+                            <label class="col-lg-8 control-label">UDP</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <!-- col-lg-6 start here -->
+        <div class="panel panel-info toggle panelRefresh" id="spr_6">
+            <!-- Start .panel -->
+            <div class="panel-heading">
+                <h4 class="panel-title">扫描参数</h4>
+                <div class="panel-controls panel-controls-hide" style="display: none;"><a href="#" class="panel-refresh"><i class="im-spinner6"></i></a><a href="#" class="toggle panel-minimize"><i class="im-minus"></i></a></div></div>
+            <div class="panel-body"  style="margin: 0px; padding: 0px;">
+                <form action="#" class="form-horizontal" >
+                    <div class="form-group" style="margin: 0px; padding: 0px;" >
+                        <label class="col-lg-4 control-label" >扫描起始URL</label>
+                        <div class="col-lg-8">
+                            <label class="col-lg-8 control-label">http://127.0.0.1/monitor</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin: 0px; padding: 0px;">
+                        <label class="col-lg-4 control-label">扫描策略</label>
+                        <div class="col-lg-8">
+                            <label class="col-lg-8 control-label">Normal</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin: 0px; padding: 0px;">
+                        <label class="col-lg-4 control-label">&nbsp;</label>
+                        <div class="col-lg-8">
+                            <label class="col-lg-8 control-label">&nbsp;</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-10" style="margin: 0px; padding: 0px;">
+
+    </div>
+    <div class="col-lg-2" style="margin: 0px; padding: 0px;">
+        <button id="btn_start_scan" type="submit" class="btn btn-success" onclick=start_scan()>开始扫描</button>
+        <button id="btn_stop_scan" type="submit" class="btn btn-danger" onclick=stop_scan() disabled="true">停止扫描</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+    <h4 class="page-header"><i class="im-table2"></i> 运行状态</h4>
+    </div>
+    <div class="col-lg-12 ">
+    <div class="panel panel-primary plain toggle panelClose panelRefresh" id="spr_1"  style="margin: 0px; padding: 0px;">
+                                <!-- Start .panel -->
+        <div class="panel-heading white-bg">
+            <h4 class="panel-title">Web漏扫代理运行状态</h4>
+            <div class="panel-controls panel-controls-hide" style="display: none;">
+                <a href="#" class="panel-refresh"><i class="im-spinner6"></i></a>
+                <a href="#" class="toggle panel-minimize"><i class="im-minus"></i></a>
+                <a href="#" class="panel-close"><i class="im-close"></i></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: auto;">
+                <div class="table-responsive" style="overflow: hidden; width: 100%; height: auto;">
+                    <table class="table table-bordered table-hover" id="agent_state_table">
+                        <thead>
+                            <tr>
+                                <th class="per40">代理名称</th>
+                                <th class="per40">代理IP地址</th>
+                                <th class="per15">代理端口</th>
+                                <th class="per15">状态时标</th>
+                                <th class="per15">代理状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="agent_state_table_body">
+                            <tr class="active">
+                                <td>Jacob Olsen</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                            </tr>
+                            <tr class="info">
+                                <td>Jacob Olsen</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                            </tr>
+                            <tr class="success">
+                                <td>Jacob Olsen</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                            </tr>
+                            <tr class="danger">
+                                <td>Jacob Olsen</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="col-lg-12">
+    <hr/>
+    </div>
+    <div class="col-lg-12 ">
+        <div class="panel panel-primary plain toggle panelClose panelRefresh" id="spr_1"  style="margin: 0px; padding: 0px;">
+                                <!-- Start .panel -->
+        <div class="panel-heading white-bg">
+            <h4 class="panel-title">Web漏扫运行状态</h4>
+            <div class="panel-controls panel-controls-hide" style="display: none;">
+                <a href="#" class="panel-refresh"><i class="im-spinner6"></i></a>
+                <a href="#" class="toggle panel-minimize"><i class="im-minus"></i></a>
+                <a href="#" class="panel-close"><i class="im-close"></i></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: auto;">
+                <div class="table-responsive" style="overflow: hidden; width: 100%; height: auto;">
+                    <table class="table table-bordered table-hover" id="wvs_state_table">
+                        <thead>
+                            <tr>
+                                <th class="per40">漏扫名称</th>
+                                <th class="per40">代理IP地址</th>
+                                <th class="per15">代理端口</th>
+                                <th class="per15">状态时标</th>
+                                <th class="per15">漏扫状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wvs_state_table_body">
+                            <tr class="active">
+                                <td>Jacob Olsen</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                            </tr>
+                            <tr class="info">
+                                <td>Jacob Olsen</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                            </tr>
+                            <tr class="success">
+                                <td>Jacob Olsen</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                            </tr>
+                            <tr class="danger">
+                                <td>Jacob Olsen</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                                <td>Developer</td>
+                                <td>2530$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

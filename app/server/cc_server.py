@@ -8,12 +8,13 @@ logger = logging.getLogger("Server")
 
 
 class CCServer(UDPEndPoint):
-    def __init__(self, port=6666):
+    def __init__(self, ip=None, port=6000):
+        self.server_ip = ip
         self.agent_list = []
         self.agent_state_monitor = AgentStateMonitor()
 
         msg_bus.add_msg_listener(common_msg.MSG_SERVER_COMMAND, self.send_command)
-        super(CCServer, self).__init__(port=port, handler=self.receive_data_handler)
+        super(CCServer, self).__init__(ip=self.server_ip, port=port, handler=self.receive_data_handler)
 
     def receive_data_handler(self, data, address):
         if address not in self.agent_list:
@@ -62,10 +63,11 @@ class CCServer(UDPEndPoint):
 
     def send_command(self, msg):
         command_json = msg.data
+        print("in CCServer " + str(command_json))
+        # print(self.agent_list)
         for address in self.agent_list:
             identifier = "[{}:{}]".format(address[0], address[1])
             if identifier in list(self.agent_state_monitor.agent_state_dict.keys()):
-                # print("in CCServer " + str(command_json))
                 self.send_json_to(command_json, address)
 
     def send_config(self, msg):

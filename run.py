@@ -14,10 +14,7 @@ command = {
 }
 
 
-
 if __name__ == '__main__':
-
-
     server = CCServer()
     server.start()
     agent_state_monitor = AgentStateMonitor()
@@ -28,14 +25,15 @@ if __name__ == '__main__':
         "Data": {
             "Action": "StartNewScan",
             "Config": {  # 可选，当命令为StartNewScan时需提供该字段作为扫描参数
-                "StartURL": "http://192.168.3.10",
+                # "StartURL": "http://192.168.1.28",
+                "StartURL": "http://demo.testfire.net",
                 "ScanPolicy": "Full"
             }
         }
     }
-    time.sleep(10)
+    time.sleep(20)
     common_msg.msg_server_command.data = command
-    # print("in run_server " + str(agent_event.event_wvs_command.dict))
+    print("in run_server " + str(common_msg.msg_server_command.data))
     msg_bus.send_msg(common_msg.msg_server_command)
 
     time.sleep(60)
