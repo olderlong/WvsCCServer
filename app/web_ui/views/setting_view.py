@@ -6,10 +6,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SelectField, SubmitField
 from wtforms.validators import DataRequired,IPAddress,URL
 
+from app.lib import msg_bus,common_msg
 from app.cli_ui import CliApp
-from app.web_ui.serverconfig import ServerConfig, ScanSetting
+from app.web_ui.serverconfig import ServerConfig, ScanSetting, ScanResult
+from app.server import AgentStateMonitor
+from app.web_ui.views import result_view as result_view
 
 logger = logging.getLogger("Server")
+agent_state_list = list(AgentStateMonitor().agent_state_dict.values())
 
 
 class CCServerSettingForm(FlaskForm):
@@ -19,7 +23,7 @@ class CCServerSettingForm(FlaskForm):
     CCProtocol = SelectField('通信协议', choices=[
         ('UDP', 'UDP'),
         ('TCP', 'TCP')
-    ],default=ServerConfig.CC_PROTOCOL)
+    ], default=ServerConfig.CC_PROTOCOL)
 
     submit_start = SubmitField('启动控制服务器')
     submit_stop = SubmitField('停止控制服务器')
@@ -52,6 +56,10 @@ def server_setting():
         cli_app = CliApp(ip=ccserver_ip, port=ccserver_port, protocol=ccserver_protocol)
         if request.form.get("submit_start") == u"启动控制服务器":
             cli_app.run()
+
+            ScanResult().wvs_result_list.clear()
+            msg_bus.add_msg_listener(common_msg.MSG_SCAN_RESULT_RECEIVE, result_view.scan_result_handler)
+
             logger.info("控制服务器已启动：(IP:{}, Port：{}, Protocol：{})".format(
                 ccserver_ip,
                 ccserver_port,
@@ -59,6 +67,7 @@ def server_setting():
                 ))
         elif request.form.get("submit_stop") == u"停止控制服务器":
             cli_app.stop()
+
             logger.info("控制服务器已停止：(IP:{}, Port：{}, Protocol：{})".format(
                 ccserver_ip,
                 ccserver_port,
@@ -81,7 +90,15 @@ def scan_setting():
             scan_config.scan_policy
         ))
         # return redirect(url_for("setting",title="配置中心",ScanSettingForm=scan_setting_form))
-        return redirect(url_for("monitor", title="监控中心"))
+        # return render_template("monitor.html", title="监控中心", scan_config=scan_config, server_config=ServerConfig())
+        return render_template(
+            "monitor.html",
+            title="监控中心",
+            scan_config=scan_config,
+            server_config=ServerConfig(),
+            agent_state_list=agent_state_list
+        )
+        # return redirect(url_for("monitor", title="监控中心", scan_config=scan_config, server_config=ServerConfig()))
     else:
         return (url_for("setting"))
 
