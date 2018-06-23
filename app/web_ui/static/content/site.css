@@ -43,3 +43,6 @@ input[type="checkbox"].input-validation-error {
 .panel-heading{
     background-color: #3071a9;
 }
+.table tbody tr td{
+            vertical-align: middle;
+        }
