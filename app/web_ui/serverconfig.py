@@ -28,6 +28,11 @@ class ScanSetting:
         self.start_url = url
         self.scan_policy = policy
 
+@singleton
+class ScanResult:
+    def __init__(self):
+        self.wvs_result_list = []
+
 
 
 class DevelopmentConfig(ServerConfig):
