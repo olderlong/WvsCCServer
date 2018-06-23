@@ -26,8 +26,8 @@ class CommonMsg(object):
         self.MSG_WVS_STATE = "WVSState"
         self.msg_wvs_state = Message(subject=self.MSG_WVS_STATE)
 
-        self.MSG_WVS_RESULT_RECEIVE = "ScanResultReceive"
-        self.msg_scan_result_receive = Message(subject=self.MSG_WVS_RESULT_RECEIVE)
+        self.MSG_SCAN_RESULT_RECEIVE = "ScanResultReceive"
+        self.msg_scan_result_receive = Message(subject=self.MSG_SCAN_RESULT_RECEIVE)
 
         self.MSG_WVS_COMMAND = "WVSCommand"
         self.msg_wvs_command = Message(subject=self.MSG_WVS_COMMAND)
