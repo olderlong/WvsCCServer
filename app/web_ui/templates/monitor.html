@@ -137,9 +137,13 @@
         socket.emit('wvs_scan_control',{'Command':command});
         // socket.close()
     }
+    function init_agent_state_table(){
+
+    }
     $(document).ready(function(){
         start_agent_state_update()
         start_wvs_state_update()
+        init_agent_state_table()
         // add_wvs_agent_state(data)
     });
 
@@ -163,19 +167,19 @@
                     <div class="form-group" style="margin: 0px; padding: 0px;">
                         <label class="col-lg-4 control-label">控制中心IP</label>
                         <div class="col-lg-8">
-                            <label class="col-lg-8 control-label">192.168.1.31</label>
+                            <label class="col-lg-8 control-label">{{server_config.CC_SERVER_IP}}</label>
                         </div>
                     </div>
                     <div class="form-group" style="margin: 0px; padding: 0px;">
                         <label class="col-lg-4 control-label">控制中心监听端口</label>
                         <div class="col-lg-8">
-                            <label class="col-lg-8 control-label">6000</label>
+                            <label class="col-lg-8 control-label">{{server_config.CC_SERVER_PORT}}</label>
                         </div>
                     </div>
                     <div class="form-group" style="margin: 0px; padding: 0px;">
                         <label class="col-lg-4 control-label">通信协议</label>
                         <div class="col-lg-8">
-                            <label class="col-lg-8 control-label">UDP</label>
+                            <label class="col-lg-8 control-label">{{server_config.CC_PROTOCOL}}</label>
                         </div>
                     </div>
                 </form>
@@ -194,13 +198,13 @@
                     <div class="form-group" style="margin: 0px; padding: 0px;" >
                         <label class="col-lg-4 control-label" >扫描起始URL</label>
                         <div class="col-lg-8">
-                            <label class="col-lg-8 control-label">http://127.0.0.1/monitor</label>
+                            <label class="col-lg-8 control-label">{{scan_config.start_url}}</label>
                         </div>
                     </div>
                     <div class="form-group" style="margin: 0px; padding: 0px;">
                         <label class="col-lg-4 control-label">扫描策略</label>
                         <div class="col-lg-8">
-                            <label class="col-lg-8 control-label">Normal</label>
+                            <label class="col-lg-8 control-label">{{scan_config.scan_policy}}</label>
                         </div>
                     </div>
                     <div class="form-group" style="margin: 0px; padding: 0px;">
@@ -252,34 +256,35 @@
                             </tr>
                         </thead>
                         <tbody id="agent_state_table_body">
-                            <tr class="active">
-                                <td>Jacob Olsen</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                            </tr>
-                            <tr class="info">
-                                <td>Jacob Olsen</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                            </tr>
-                            <tr class="success">
-                                <td>Jacob Olsen</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                            </tr>
-                            <tr class="danger">
-                                <td>Jacob Olsen</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                            </tr>
+                        {% for agent_state in agent_state_list %}
+                            {% if agent_state.state == "Online" %}
+                                <tr class="active" id="Agent_{{ agent_state.name }}_{{ agent_state.address[0] }}">
+                                    <td>{{agent_state.name}}</td>
+                                    <td>{{agent_state.address[0]}}</td>
+                                    <td>{{agent_state.address[1]}}</td>
+                                    <td>get_time_str({{agent_state.timestamp}})</td>
+                                    <td>{{agent_state.state}}</td>
+                                </tr>
+                            {% elif agent_state.state == "Offline" %}
+                                <tr class="warning" id="Agent_{{ agent_state.name }}_{{ agent_state.address[0] }}">
+                                    <td>{{agent_state.name}}</td>
+                                    <td>{{agent_state.address[0]}}</td>
+                                    <td>{{agent_state.address[1]}}</td>
+                                    <td>get_time_str({{agent_state.timestamp}})</td>
+                                    <td>{{agent_state.state}}</td>
+                                </tr>
+                            {% elif agent_state.state == "Dead" %}
+                                <tr class="danger" id="Agent_{{ agent_state.name }}_{{ agent_state.address[0] }}">
+                                    <td>{{agent_state.name}}</td>
+                                    <td>{{agent_state.address[0]}}</td>
+                                    <td>{{agent_state.address[1]}}</td>
+                                    <td>get_time_str({{agent_state.timestamp}})</td>
+                                    <td>{{agent_state.state}}</td>
+                                </tr>
+                            {% else %}
+                            {% endif %}
+                        {% endfor %}
+
                         </tbody>
                     </table>
                 </div>
@@ -315,34 +320,6 @@
                             </tr>
                         </thead>
                         <tbody id="wvs_state_table_body">
-                            <tr class="active">
-                                <td>Jacob Olsen</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                            </tr>
-                            <tr class="info">
-                                <td>Jacob Olsen</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                            </tr>
-                            <tr class="success">
-                                <td>Jacob Olsen</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                            </tr>
-                            <tr class="danger">
-                                <td>Jacob Olsen</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                                <td>Developer</td>
-                                <td>2530$</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
