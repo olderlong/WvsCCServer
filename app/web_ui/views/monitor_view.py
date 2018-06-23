@@ -7,13 +7,27 @@ from flask_socketio import SocketIO, emit
 from app.web_ui import socketio
 from app.lib import msg_bus, common_msg
 from app.web_ui.serverconfig import ScanSetting, ServerConfig
-
+from app.server import AgentStateMonitor
 
 logger = logging.getLogger("Server")
+agent_state_list = list(AgentStateMonitor().agent_state_dict.values())
 
 
 def monitor():
-    return render_template("monitor.html", title="监控中心")
+    # 调试用
+
+    # for debug
+
+    server_config = ServerConfig()
+    scan_config = ScanSetting()
+    logger.info(agent_state_list)
+    return render_template(
+        "monitor.html",
+        title="监控中心",
+        server_config=server_config,
+        scan_config=scan_config,
+        agent_state_list=agent_state_list
+    )
 
 
 def ws_agent_state_send(msg):
@@ -101,6 +115,10 @@ def wvs_scan_control(data):
         }
         common_msg.msg_server_command.data = start_scan_cmd
         msg_bus.send_msg(common_msg.msg_server_command)
+
+        # 开始扫描后注册扫描结果接收消息
+        # msg_bus.add_msg_listener(common_msg.MSG_SCAN_RESULT_RECEIVE, result_view.scan_result_handler)
+
         logger.info("Start scan with config: {}".format(start_scan_cmd))
     elif command is "stop":
         stop_scan_cmd = {
