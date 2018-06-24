@@ -8,7 +8,8 @@ from wtforms.validators import DataRequired,IPAddress,URL
 
 from app.lib import msg_bus,common_msg
 from app.cli_ui import CliApp
-from app.web_ui.serverconfig import ServerConfig, ScanSetting, ScanResult
+from app.web_ui.server_config import ServerConfig
+from app.web_ui.scan_session import ScanSetting, ScanResult
 from app.server import AgentStateMonitor
 from app.web_ui.views import result_view as result_view
 

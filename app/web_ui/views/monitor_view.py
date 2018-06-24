@@ -3,40 +3,42 @@
 import logging
 from flask import render_template
 
-from flask_socketio import SocketIO, emit
 from app.web_ui import socketio
 from app.lib import msg_bus, common_msg
-from app.web_ui.serverconfig import ScanSetting, ServerConfig
+from app.web_ui.server_config import ServerConfig
+from app.web_ui.scan_session import ScanSetting, WVSState, AgentState
 from app.server import AgentStateMonitor
 
 logger = logging.getLogger("Server")
-agent_state_list = list(AgentStateMonitor().agent_state_dict.values())
+# agent_state_list = list(AgentStateMonitor().agent_state_dict.values())
+all_agent_state = AgentState()
+all_wvs_state = WVSState()
+
 
 
 def monitor():
-    # 调试用
-
-    # for debug
-
     server_config = ServerConfig()
     scan_config = ScanSetting()
-    logger.info(agent_state_list)
+    logger.info(all_agent_state.get_agent_list())
     return render_template(
         "monitor.html",
         title="监控中心",
         server_config=server_config,
         scan_config=scan_config,
-        agent_state_list=agent_state_list
+        agent_state_list=all_agent_state.get_agent_list(),
+        wvs_state_list=all_wvs_state.get_wvs_state_list()
     )
 
 
 def ws_agent_state_send(msg):
     agent_state = msg.data
+    all_agent_state.add_agent_state(agent_state)
     socketio.emit(
         "agent_state_update",
         agent_state,
         namespace="/agent_state_ns"
     )
+
     logger.info("Send agent state: {}".format(agent_state))
     # socketio.emit(
     #     "agent_state_update",
@@ -52,12 +54,14 @@ def ws_agent_state_send(msg):
 
 def ws_wvs_state_send(msg):
     wvs_state = msg.data
+    all_wvs_state.add_wvs_state(wvs_state)
     socketio.emit(
         "wvs_state_update",
         wvs_state,
         namespace="/wvs_state_ns"
     )
     logger.info("Send wvs state: {}".format(wvs_state))
+
 
 @socketio.on("connect", namespace="/agent_state_ns")
 def ws_agent_state_connect():
@@ -115,10 +119,6 @@ def wvs_scan_control(data):
         }
         common_msg.msg_server_command.data = start_scan_cmd
         msg_bus.send_msg(common_msg.msg_server_command)
-
-        # 开始扫描后注册扫描结果接收消息
-        # msg_bus.add_msg_listener(common_msg.MSG_SCAN_RESULT_RECEIVE, result_view.scan_result_handler)
-
         logger.info("Start scan with config: {}".format(start_scan_cmd))
     elif command is "stop":
         stop_scan_cmd = {
