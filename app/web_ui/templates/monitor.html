@@ -42,7 +42,7 @@
 
             var selector = "tr[id='"+tr_id+"']" + "> td:nth-child(4)"
             // $(selector).text( data["Timestamp"].toString())
-            $(selector).text( get_time_str(data["Timestamp"]))
+            $(selector).text( data["Timestamp"])
 
             var selector ="tr[id='"+tr_id+"']" + "> td:nth-child(5)"
             $(selector).text( data["State"].toString())
@@ -68,7 +68,7 @@
             " <td>"+data["Name"] +"</td>\n" +
             "  <td>"+ data["Address"][0] +"</td>\n" +
             " <td>"+ data["Address"][1] +"</td>\n" +
-            " <td>"+ get_time_str(data["Timestamp"]) +"</td>\n" +
+            " <td>"+ data["Timestamp"] +"</td>\n" +
             " <td>"+ data["State"] +"</td>\n" +
             " </tr>"
 
@@ -90,7 +90,7 @@
 
             var selector = "tr[id='"+tr_id+"']" + "> td:nth-child(4)"
             // $(selector).text( data["Timestamp"].toString())
-            $(selector).text( get_time_str(data["Timestamp"]))
+            $(selector).text( data["Timestamp"])
 
             var selector ="tr[id='"+tr_id+"']" + "> td:nth-child(5)"
             $(selector).text( data["State"].toString())
@@ -106,7 +106,7 @@
             " <td>"+data["Name"] +"</td>\n" +
             "  <td>"+ data["Address"][0] +"</td>\n" +
             " <td>"+ data["Address"][1] +"</td>\n" +
-            " <td>"+ get_time_str(data["Timestamp"]) +"</td>\n" +
+            " <td>"+data["Timestamp"] +"</td>\n" +
             " <td>"+ data["State"] +"</td>\n" +
             " </tr>"
 
@@ -257,29 +257,29 @@
                         </thead>
                         <tbody id="agent_state_table_body">
                         {% for agent_state in agent_state_list %}
-                            {% if agent_state.state == "Online" %}
-                                <tr class="active" id="Agent_{{ agent_state.name }}_{{ agent_state.address[0] }}">
-                                    <td>{{agent_state.name}}</td>
-                                    <td>{{agent_state.address[0]}}</td>
-                                    <td>{{agent_state.address[1]}}</td>
-                                    <td>get_time_str({{agent_state.timestamp}})</td>
-                                    <td>{{agent_state.state}}</td>
+                            {% if agent_state['State'] == "Online" %}
+                                 <tr class="active" id="Agent_{{ agent_state['Name']}}_{{ agent_state['Address'][0] }}">
+                                    <td>{{agent_state['Name']}}</td>
+                                    <td>{{agent_state['Address'][0]}}</td>
+                                    <td>{{agent_state['Address'][1]}}</td>
+                                    <td>{{agent_state['Timestamp']}}</td>
+                                    <td>{{agent_state['State']}}</td>
                                 </tr>
-                            {% elif agent_state.state == "Offline" %}
-                                <tr class="warning" id="Agent_{{ agent_state.name }}_{{ agent_state.address[0] }}">
-                                    <td>{{agent_state.name}}</td>
-                                    <td>{{agent_state.address[0]}}</td>
-                                    <td>{{agent_state.address[1]}}</td>
-                                    <td>get_time_str({{agent_state.timestamp}})</td>
-                                    <td>{{agent_state.state}}</td>
+                            {% elif agent_state['State'] == "Offline" %}
+                                <tr class="warning" id="Agent_{{ agent_state['Name']}}_{{ agent_state['Address'][0] }}">
+                                    <td>{{agent_state['Name']}}</td>
+                                    <td>{{agent_state['Address'][0]}}</td>
+                                    <td>{{agent_state['Address'][1]}}</td>
+                                    <td>{{agent_state['Timestamp']}}</td>
+                                    <td>{{agent_state['State']}}</td>
                                 </tr>
-                            {% elif agent_state.state == "Dead" %}
-                                <tr class="danger" id="Agent_{{ agent_state.name }}_{{ agent_state.address[0] }}">
-                                    <td>{{agent_state.name}}</td>
-                                    <td>{{agent_state.address[0]}}</td>
-                                    <td>{{agent_state.address[1]}}</td>
-                                    <td>get_time_str({{agent_state.timestamp}})</td>
-                                    <td>{{agent_state.state}}</td>
+                            {% elif agent_state['State'] == "Dead" %}
+                                <tr class="danger" id="Agent_{{ agent_state['Name']}}_{{ agent_state['Address'][0] }}">
+                                    <td>{{agent_state['Name']}}</td>
+                                    <td>{{agent_state['Address'][0]}}</td>
+                                    <td>{{agent_state['Address'][1]}}</td>
+                                    <td>{{agent_state['Timestamp']}}</td>
+                                    <td>{{agent_state['State']}}</td>
                                 </tr>
                             {% else %}
                             {% endif %}
@@ -320,6 +320,17 @@
                             </tr>
                         </thead>
                         <tbody id="wvs_state_table_body">
+                        {% for wvs_state in wvs_state_list %}
+                                <tr class="active" id="WVS_{{ wvs_state['Name']}}_{{ wvs_state['Address'][0] }}">
+                                    <td>{{wvs_state['Name']}}</td>
+                                    <td>{{wvs_state['Address'][0]}}</td>
+                                    <td>{{wvs_state['Address'][1]}}</td>
+                                    <!--<td>get_time_str({{ wvs_state['Timestamp'] }})</td>-->
+                                    <td >{{wvs_state['Timestamp']}}</td>
+                                    <td>{{wvs_state['State']}}</td>
+                                </tr>
+                        {% endfor %}
+
                         </tbody>
                     </table>
                 </div>
