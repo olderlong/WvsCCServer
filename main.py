@@ -28,6 +28,6 @@ if __name__ == '__main__':
     # common_msg.msg_server_command.data = command
     # # print("in run_server " + str(agent_event.event_wvs_command.dict))
     # msg_bus.send_msg(common_msg.msg_server_command)
-    app.web_ui.socketio.run(app.web_ui.app)
+    app.web_ui.socketio.run(app.web_ui.app, host="", port=80)
     # app.web_ui.app.run(port=80)
 
