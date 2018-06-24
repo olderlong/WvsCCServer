@@ -66,6 +66,7 @@ class AgentStateMonitor(object):
 
                         agent_state.state = new_state
                         common_msg.msg_agent_state_update.data = agent_state.gen_json_object()
+                        msg_bus.send_msg(common_msg.msg_agent_state_update)
 
                         self.agent_state_dict.pop(agent_state.agent_identifier)
                     else:
@@ -74,6 +75,7 @@ class AgentStateMonitor(object):
 
                         common_msg.msg_agent_state_update.data = agent_state.gen_json_object()
                         msg_bus.send_msg(common_msg.msg_agent_state_update)
+
                         time.sleep(1)
 
             time.sleep(STATE_UPDATE_INTERVAL)
