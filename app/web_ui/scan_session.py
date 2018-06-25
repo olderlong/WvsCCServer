@@ -64,8 +64,10 @@ class WVSState:
     def add_wvs_state(self, state):
         existed, index = self.has(state)
         if not existed:
+            state["Timestamp"] = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(state["Timestamp"]))
             self.wvs_state_list.append(state)
         else:
+            state["Timestamp"] = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(state["Timestamp"]))
             self.wvs_state_list[index] = state
 
 
