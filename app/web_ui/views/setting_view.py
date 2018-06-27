@@ -9,12 +9,14 @@ from wtforms.validators import DataRequired,IPAddress,URL
 from app.lib import msg_bus,common_msg
 from app.cli_ui import CliApp
 from app.web_ui.server_config import ServerConfig
-from app.web_ui.scan_session import ScanSetting, ScanResult
+from app.web_ui.scan_session import ScanSetting, WVSState, AgentState,ScanResult
 from app.server import AgentStateMonitor
 from app.web_ui.views import result_view as result_view
 
 logger = logging.getLogger("Server")
-agent_state_list = list(AgentStateMonitor().agent_state_dict.values())
+# agent_state_list = list(AgentStateMonitor().agent_state_dict.values())
+all_agent_state = AgentState()
+all_wvs_state = WVSState()
 
 
 class CCServerSettingForm(FlaskForm):
@@ -31,14 +33,14 @@ class CCServerSettingForm(FlaskForm):
 
 
 class ScanSettingForm(FlaskForm):
-    StartURL = StringField("起始URL", validators=[DataRequired, URL])
+    StartURL = StringField("起始URL", validators=[DataRequired, URL],default=ScanSetting().start_url)
     # ScanPolicy = SelectField("扫描策略", validators=[DataRequired])
     # Select类型，下拉单选框，choices里的内容会在Option里，里面每个项是(值，显示名)对
     ScanPolicy = SelectField('扫描策略', choices=[
         ('Normal', 'Normal'),
         ('Quick', 'Quick'),
         ('Full', 'Full'),
-    ], validators=[DataRequired])
+    ], validators=[DataRequired],default=ScanSetting().scan_policy)
     submit = SubmitField('确定')
 
 
@@ -75,9 +77,11 @@ def server_setting():
                 ccserver_protocol
                 ))
 
-        return redirect(url_for("setting",title="配置中心",CCServerSettingForm=server_setting_form))
+        return render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form,
+                               ScanSettingForm=ScanSettingForm())
     else:
-        return (url_for("setting"))
+        return render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form,
+                               ScanSettingForm=ScanSettingForm())
 
 
 def scan_setting():
@@ -90,18 +94,17 @@ def scan_setting():
             scan_config.start_url,
             scan_config.scan_policy
         ))
-        # return redirect(url_for("setting",title="配置中心",ScanSettingForm=scan_setting_form))
-        # return render_template("monitor.html", title="监控中心", scan_config=scan_config, server_config=ServerConfig())
         return render_template(
             "monitor.html",
             title="监控中心",
             scan_config=scan_config,
             server_config=ServerConfig(),
-            agent_state_list=agent_state_list
+            agent_state_list=all_agent_state.get_agent_list(),
+            wvs_state_list=all_wvs_state.get_wvs_state_list()
         )
-        # return redirect(url_for("monitor", title="监控中心", scan_config=scan_config, server_config=ServerConfig()))
     else:
-        return (url_for("setting"))
+        return render_template("setting.html", title="配置中心", CCServerSettingForm=CCServerSettingForm(),
+                               ScanSettingForm=scan_setting_form)
 
 
 def setting():
@@ -115,4 +118,5 @@ def setting():
     scan_setting_form.StartURL.data = scan_config.start_url
     scan_setting_form.ScanPolicy.data = scan_config.scan_policy
 
-    return render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form, ScanSettingForm=scan_setting_form)
+    return render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form,
+                           ScanSettingForm=scan_setting_form)

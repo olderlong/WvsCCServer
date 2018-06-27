@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # _*_coding:utf-8 -*_
 from queue import Queue, Empty
 from threading import *

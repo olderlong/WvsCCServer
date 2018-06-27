@@ -1,0 +1,59 @@
+[
+    {
+        "VulType": "",
+        "VulUrl": "",
+        "VulSeverity": "",
+        "VulDetails":[
+            {
+                "url_param_variant":"",    
+                "vul_reasoning":"",         
+                "CWE":"",                   
+                "CVE":""                    
+            },
+            {
+                "url_param_variant":"",
+                "vul_reasoning":"",
+                "CWE":"",
+                "CVE":""
+            }
+        ]
+    },
+    {
+        "VulType": "",
+        "VulUrl": "",
+        "VulSeverity": "",
+        "VulDetails":[
+            {
+                "url_param_variant":"",    
+                "vul_reasoning":"",         
+                "CWE":"",                   
+                "CVE":""                    
+            },
+            {
+                "url_param_variant":"",
+                "vul_reasoning":"",
+                "CWE":"",
+                "CVE":""
+            }
+        ]
+    },
+    {
+        "VulType": "",
+        "VulUrl": "",
+        "VulSeverity": "",
+        "VulDetails":[
+            {
+                "url_param_variant":"",    
+                "vul_reasoning":"",         
+                "CWE":"",                   
+                "CVE":""                    
+            },
+            {
+                "url_param_variant":"",
+                "vul_reasoning":"",
+                "CWE":"",
+                "CVE":""
+            }
+        ]
+    }     
+]

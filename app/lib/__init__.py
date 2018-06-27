@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+# _*_coding:utf-8 -*_
 from .message_bus import Message, MessageBus
 from .common_msg import CommonMsg
 from .udp_endpoint import UDPEndPoint

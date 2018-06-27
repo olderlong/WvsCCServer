@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+# _*_coding:utf-8 -*_
 # import time
 # from app.lib import *
 from app.server import *

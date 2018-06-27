@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # _*_ coding:utf-8 _*_
 import json, logging
 from app.lib import UDPEndPoint, msg_bus, common_msg
