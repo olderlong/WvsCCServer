@@ -1,0 +1,8 @@
+{
+    "ScanSetting":{
+        "StartURL": "http://127.0.0.1",
+        "ScanPolicy": "Normal"
+    },
+    "ScanResultFile":"scan_result.json",
+    "Timestamp":"1529455672.7734838"
+}
