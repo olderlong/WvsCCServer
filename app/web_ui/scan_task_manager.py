@@ -1,4 +1,8 @@
-import json, os, time
+#! /usr/bin/env python3
+# _*_coding:utf-8 -*_
+import json, os, time, logging, shutil
+
+logger = logging.getLogger("Server")
 
 
 def singleton(cls):
@@ -49,6 +53,10 @@ class ScanSetting:
     def get_scan_setting(self):
         return (self.start_url, self.scan_policy)
 
+    def set_scan_setting(self,url="", policy="Normal"):
+        self.start_url = url
+        self.scan_policy = policy
+
 
 @singleton
 class ScanResult:
@@ -75,6 +83,9 @@ class ScanResult:
     def get_scan_result(self):
         return self.wvs_result_list
 
+    def clear_result_list(self):
+        self.wvs_result_list.clear()
+
 
 class ScanTaskManager(object):
     def __init__(self, filepath=None):
@@ -96,35 +107,50 @@ class ScanTaskManager(object):
     def __gen_task_info_path(self, task_name):
         return os.path.join(os.getcwd(), "scan_task", task_name)
 
-    def get_task_info(self, task_name):
-        with open(os.path.join(self.__gen_task_info_path(task_name), "task_info.json"), 'r') as rf:
+    def get_task_info(self, task_name=None):
+        if task_name:
+            name = task_name
+        else:
+            name = self.get_last_task()[0]
+
+        with open(os.path.join(self.__gen_task_info_path(name), "task_info.json"), 'r') as rf:
             task_info_json = json.load(rf)
             task_info = TaskInfo(task_info_json)
             ScanSetting(task_info.start_url, task_info.scan_policy)
-            return task_info
+            self.__get_task_result(os.path.join(self.__gen_task_info_path(name), "scan_result.json"))
+            return task_info, ScanSetting().get_scan_setting(),ScanResult().wvs_result_list
 
-    def get_task_result(self, task_name):
-        task_info = self.get_task_info(task_name)
-        with open(os.path.join(self.__gen_task_info_path(task_name), task_info.scan_result_file), 'r') as rf:
+    def __get_task_result(self, scan_result_file):
+        with open(scan_result_file, 'r') as rf:
             ScanResult().wvs_result_list = json.load(rf)
-            return ScanResult().wvs_result_list
 
     def add_new_task(self, task_name):
-        os.mkdir(self.__gen_task_info_path(task_name))
-        self.scan_task_list.append((task_name, time.time()))
+        task_path = self.__gen_task_info_path(task_name)
+        if not os.path.exists(task_path):
+            os.mkdir(self.__gen_task_info_path(task_name))
+            self.scan_task_list.append((task_name, time.time()))
+            ScanSetting("","Normal")
+            ScanResult().clear_result_list()
+            return True
+        else:
+            logger.info("任务已存在，请更改任务名称!")
+            return False
 
-    def save_task(self):
-        task_name = self.get_last_task()[0]
+    def save_task(self,task_name=None):
+        if task_name:
+            name = task_name
+        else:
+            name = self.get_last_task()[0]
         self.save_task_list()
 
-        with open(os.path.join(self.__gen_task_info_path(task_name), "task_info.json"), 'w') as wf:
+        with open(os.path.join(self.__gen_task_info_path(name), "task_info.json"), 'w') as wf:
             task_info = TaskInfo()
             task_info.start_url, task_info.scan_policy = ScanSetting().get_scan_setting()
 
             task_info_json = task_info.get_task_info_dict()
             json.dump(task_info_json, wf)
 
-        with open(os.path.join(self.__gen_task_info_path(task_name), task_info.scan_result_file), 'w') as wf:
+        with open(os.path.join(self.__gen_task_info_path(name), task_info.scan_result_file), 'w') as wf:
             json.dump(ScanResult().get_scan_result(), wf)
 
     def save_task_list(self):
@@ -134,6 +160,21 @@ class ScanTaskManager(object):
 
         with open(self.scan_tasks_file, 'w') as wf:
             json.dump(task_dict, wf)
+
+    def del_task(self,task_name):
+        for task in self.scan_task_list:
+            if task[0] == task_name:
+                task_path = self.__gen_task_info_path(task_name)
+                if os.path.exists(task_path):
+                    # os.removedirs(task_path)
+                    shutil.rmtree(task_path)
+                else:
+                    logger.info("任务不存在，请更改任务名称!")
+                self.scan_task_list.remove(task)
+                self.save_task_list()
+                break
+
+
 
     def get_last_task(self):
         return self.scan_task_list[::-1][0]
