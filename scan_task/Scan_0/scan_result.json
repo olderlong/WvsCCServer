@@ -5,10 +5,10 @@
         "VulSeverity": "",
         "VulDetails":[
             {
-                "url_param_variant":"",    
-                "vul_reasoning":"",         
-                "CWE":"",                   
-                "CVE":""                    
+                "url_param_variant":"",
+                "vul_reasoning":"",
+                "CWE":"",
+                "CVE":""
             },
             {
                 "url_param_variant":"",
@@ -24,10 +24,10 @@
         "VulSeverity": "",
         "VulDetails":[
             {
-                "url_param_variant":"",    
-                "vul_reasoning":"",         
-                "CWE":"",                   
-                "CVE":""                    
+                "url_param_variant":"",
+                "vul_reasoning":"",
+                "CWE":"",
+                "CVE":""
             },
             {
                 "url_param_variant":"",
@@ -43,10 +43,10 @@
         "VulSeverity": "",
         "VulDetails":[
             {
-                "url_param_variant":"",    
-                "vul_reasoning":"",         
-                "CWE":"",                   
-                "CVE":""                    
+                "url_param_variant":"",
+                "vul_reasoning":"",
+                "CWE":"",
+                "CVE":""
             },
             {
                 "url_param_variant":"",
@@ -55,5 +55,5 @@
                 "CVE":""
             }
         ]
-    }     
+    }
 ]
