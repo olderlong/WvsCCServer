@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="favicon_16.ico"/>
     <link rel="bookmark" href="favicon_16.ico"/>
-    <title>{{ title }} - WVS 控制中心</title>
+    <title>
+        {% if title %}
+            {{ title }} - WVS 控制中心
+        {% else %}}
+            WVS 控制中心
+        {%endif%}}
+    </title>
     <link rel="stylesheet" type="text/css" href="../static/content/site.css" />
     <link rel="stylesheet" type="text/css" href="../static/content/bootstrap.min.css" />
     <script src="../static/scripts/jquery-3.3.1.min.js"></script>
@@ -26,6 +32,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('task') }}">任务管理</a></li>
                     <li><a href="{{ url_for('setting') }}">配置中心</a></li>
                     <li><a href="{{ url_for('monitor') }}">监控中心</a></li>
                     <li><a href="{{ url_for('result') }}">扫描结果</a></li>
