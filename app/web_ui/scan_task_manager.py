@@ -93,6 +93,7 @@ class ScanTaskManager(object):
             self.scan_tasks_file = filepath
         else:
             self.scan_tasks_file = self.__get_tasks_file_path()
+
         self.scan_task_list = self.__get_task_list()
         self.__last_task = self.get_last_task()
 
