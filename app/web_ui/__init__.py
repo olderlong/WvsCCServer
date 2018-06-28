@@ -19,7 +19,8 @@ socketio = SocketIO(app, async_mode=async_mode)
 
 from app.web_ui.views import *
 app.add_url_rule(rule="/", endpoint="index", view_func=index)
-app.add_url_rule(rule="/setting", endpoint="setting", view_func=setting,methods=('GET', 'POST'))
+# app.add_url_rule(rule="/task<action>", endpoint="task", view_func=task, methods=('GET', 'POST'))
+app.add_url_rule(rule="/setting", endpoint="setting", view_func=setting, methods=('GET', 'POST'))
 app.add_url_rule(rule="/server_setting", endpoint="server_setting", view_func=server_setting,methods=('GET', 'POST'))
 app.add_url_rule(rule="/scan_setting", endpoint="scan_setting", view_func=scan_setting, methods=('GET', 'POST'))
 app.add_url_rule(rule="/monitor", endpoint="monitor", view_func=monitor)
