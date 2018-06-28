@@ -17,14 +17,14 @@ all_wvs_state = WVSState()
 
 
 def monitor():
-    server_config = ServerConfig()
-    scan_config = ScanSetting()
+    # server_config = ServerConfig()
+    # scan_config = ScanSetting()
     logger.info(all_agent_state.get_agent_list())
     return render_template(
         "monitor.html",
         title="监控中心",
-        server_config=server_config,
-        scan_config=scan_config,
+        server_config=ServerConfig(),
+        scan_config=ScanSetting(),
         agent_state_list=all_agent_state.get_agent_list(),
         wvs_state_list=all_wvs_state.get_wvs_state_list()
     )
