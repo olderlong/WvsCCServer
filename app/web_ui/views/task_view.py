@@ -10,6 +10,7 @@ from app.web_ui.scan_task_manager import *
 from app.web_ui import app
 from app.lib import msg_bus, common_msg
 
+
 task_info = {
     "TaskName":"",
     "ScanSetting": {
@@ -47,23 +48,19 @@ class NewTaskForm(FlaskForm):
     ], validators=[DataRequired],default=ScanSetting().scan_policy)
     submit = SubmitField('新建任务')
 
-@app.route("/task/new", endpoint="task_start", methods=('GET', 'POST'))
+@app.route("/task/new", endpoint="task_new", methods=('GET', 'POST'))
 def new_task():
-
     new_task_form = NewTaskForm()
-    # if new_task_form.is_submitted():
-    #     # scan_config.start_url = scan_setting_form.StartURL.data
-    #     # scan_config.scan_policy = scan_setting_form.ScanPolicy.data
-    #     # logger.info("扫描起始URL: {}, 扫描策略: {}".format(
-    #     #     scan_config.start_url,
-    #     #     scan_config.scan_policy
-    #     # ))
-    #     return render_template(        )
-    # else:
-    #     return render_template("setting.html", title="配置中心", CCServerSettingForm=CCServerSettingForm(),
-    #                            ScanSettingForm=scan_setting_form)
-
-    return redirect(url_for("task"))
+    if new_task_form.is_submitted():
+        task_name = new_task_form.Name.data
+        task_manager.add_new_task(task_name)
+        ScanSetting().set_scan_setting(new_task_form.StartURL.data, new_task_form.ScanPolicy.data)
+        logger.info(ScanSetting().get_scan_setting())
+        logger.info("新任务信息>>  任务名称:{},URL:{}, 策略:{}".format(task_name, new_task_form.StartURL.data,
+                                                            new_task_form.ScanPolicy.data))
+        ScanResult().clear_result_list()
+        task_manager.save_task(task_name)
+        return redirect(url_for("task"))
 
 @app.route("/task/restart/<task_name>",endpoint="task_start", methods=('GET', 'POST'))
 def start_task(task_name):
@@ -103,6 +100,7 @@ def show_result(task_name):
 
 @app.route("/task", endpoint="task", methods=('GET', 'POST'))
 def task():
+    new_task_form = NewTaskForm()
     task_info_list = get_task_info_list()
     logger.info("任务列表：{}".format(task_info_list))
-    return render_template("task.html", title="任务管理",task_info_list=task_info_list)
+    return render_template("task.html", title="任务管理",task_info_list=task_info_list, new_task_form=new_task_form)
