@@ -1,7 +1,24 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<script>
 
+    function setCookie(cname,cvalue,exdays)
+    {
+      var d = new Date();
+      d.setTime(d.getTime()+(exdays*24*60*60*1000));
+      var expires = "expires="+d.toGMTString();
+      document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+    function restart_scan(name) {
+
+        setCookie("ScanState", "Started", 1)
+        var url = window.location.href
+        console.log(url)
+        url = url+"/restart/"+ name
+        window.location = url
+    }
+</script>
 <h2>{{ title }}</h2>
 <h3>{{ message }}</h3>
 <div class="content-row">
@@ -18,23 +35,33 @@
         </div>
         <div class="panel-body">
               <form role="form" action="/task/new", method="POST">
+                   {{ new_task_form.hidden_tag() }}
                   <div class="form-group">
-                      <label >任务名称</label>
-                      <input class="form-control" id="TaskName" placeholder="数字、字母、下划线组合">
+                      {{new_task_form.Name.label}}
+                      {{new_task_form.Name(class="form-control",id="Name",placeholder="Task_Name")}}
+
+                      <!--<label >任务名称</label>-->
+                      <!--<input class="form-control" id="TaskName" placeholder="数字、字母、下划线组合">-->
                   </div>
                   <div class="form-group">
-                      <label >起始URL</label>
-                      <input class="form-control" id="StartURL" placeholder="http://www.example.com">
+                      {{new_task_form.StartURL.label}}
+                      {{new_task_form.StartURL(class="form-control",id="StartURL",placeholder="http://www.example.com")}}
+                      <!--<label >起始URL</label>-->
+                      <!--<input class="form-control" id="StartURL" placeholder="http://www.example.com">-->
                   </div>
                   <div class="form-group">
-                      <label >扫描策略</label>
-                      <select name="policy" class="form-control" data-selecter-options="{&quot;cover&quot;:&quot;true&quot;}" tabindex="1">
-                          <option value="1">Normal</option>
-                          <option value="2">Quick</option>
-                          <option value="3">Full</option>
-                      </select>
+                      {{new_task_form.ScanPolicy.label}}
+                      {{new_task_form.ScanPolicy(class="form-control")}}
+
+                      <!--<label >扫描策略</label>-->
+                      <!--<select name="policy" class="form-control" data-selecter-options="{&quot;cover&quot;:&quot;true&quot;}" tabindex="1">-->
+                          <!--<option value="1">Normal</option>-->
+                          <!--<option value="2">Quick</option>-->
+                          <!--<option value="3">Full</option>-->
+                      <!--</select>-->
                   </div>
-                  <button name="submit" type="submit" class="btn btn-default">新建任务</button>
+                  {{ new_task_form.submit(class="btn btn-default") }}
+                  <!--<button name="submit" type="submit" class="btn btn-default">新建任务</button>-->
               </form>
         </div>
     </div>
@@ -78,7 +105,8 @@
                                     <td>
                                         <a href="{{url_for('task_delete', task_name=task_info['TaskName'])}}">删除</a>
                                         &nbsp;&nbsp;
-                                        <a href="{{url_for('task_start', task_name=task_info['TaskName'])}}">重新扫描</a>
+                                        <!--<a href="{{url_for('task_start', task_name=task_info['TaskName'])}}">重新扫描</a>-->
+                                        <a href="javascript:void(0);" onclick=restart_scan("{{task_info['TaskName']}}")>重新扫描</a>
                                     </td>
 
                                 {% endfor %}
