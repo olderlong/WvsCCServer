@@ -1,7 +1,38 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<script language="javascript" type="text/javascript">
+    function getCookie(cname){
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++){
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0)
+                return c.substring(name.length,c.length);
+        }
+        return "";
+    }
 
+    var update_server_btn_state = function(){
+
+        var server_state = getCookie("ServerState")
+        console.log(server_state)
+        if(server_state == ""){
+            $('input[id="submit_start"]').removeAttr("disabled")
+            $('input[id="submit_stop"]').attr("disabled","true")
+        }else if(server_state=="Started"){
+            $('input[id="submit_start"]').attr("disabled","true")
+            $('input[id="submit_stop"]').removeAttr("disabled")
+        }else if(server_state=="Stopped"){
+            $('input[id="submit_start"]').removeAttr("disabled")
+            $('input[id="submit_stop"]').attr("disabled","true")
+        }
+    }
+    $(document).ready(function(){
+        update_server_btn_state()
+        // add_wvs_agent_state(data)
+    });
+</script>
 <h2>{{ title }}</h2>
 <h3>{{ message }}</h3>
 <div class="content-row">
