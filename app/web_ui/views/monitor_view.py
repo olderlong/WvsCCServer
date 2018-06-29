@@ -2,11 +2,11 @@
 # _*_coding:utf-8 -*_
 import logging
 from flask import render_template
-
 from app.web_ui import socketio
 from app.lib import msg_bus, common_msg
 from app.web_ui.server_config import ServerConfig
-from app.web_ui.scan_session import ScanSetting, WVSState, AgentState
+from app.web_ui.scan_session import WVSState, AgentState
+from app.web_ui.scan_task_manager import ScanSetting
 from app.server import AgentStateMonitor
 
 logger = logging.getLogger("Server")
