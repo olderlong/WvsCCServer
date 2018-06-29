@@ -114,8 +114,41 @@
         $("tr[id='"+tr_id+"']").addClass("active")
     }
 
+   function getCookie(cname){
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++){
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0)
+                return c.substring(name.length,c.length);
+        }
+        return "";
+    }
+    function setCookie(cname,cvalue,exdays)
+    {
+      var d = new Date();
+      d.setTime(d.getTime()+(exdays*24*60*60*1000));
+      var expires = "expires="+d.toGMTString();
+      document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+    var update_scan_btn_state = function(){
+        var scan_state = getCookie("ScanState")
+        console.log(scan_state)
+        if(scan_state == ""){
+            $('button[id="btn_start_scan"]').removeAttr("disabled")
+            $('button[id="btn_stop_scan"]').attr("disabled","true")
+        }else if(scan_state=="Started"){
+            $('button[id="btn_start_scan"]').attr("disabled","true")
+            $('button[id="btn_stop_scan"]').removeAttr("disabled")
+        }else if(scan_state=="Stopped"){
+            $('button[id="btn_start_scan"]').removeAttr("disabled")
+            $('button[id="btn_stop_scan"]').attr("disabled","true")
+        }
+    }
+
     var start_scan = function(){
         console.log("Scan started")
+        setCookie("ScanState", "Started", 1)
         $('button[id="btn_start_scan"]').attr("disabled","true")
         $('button[id="btn_stop_scan"]').removeAttr("disabled")
         ws_send_scan_control("start")
@@ -124,11 +157,13 @@
         var ret = confirm("是否停止？");
         if (ret==true){
             console.log("Scan stopped")
+            setCookie("ScanState", "Stopped", 1)
             $('button[id="btn_start_scan"]').removeAttr("disabled")
             $('button[id="btn_stop_scan"]').attr("disabled","true")
             ws_send_scan_control("stop")
         }
     }
+
     function ws_send_scan_control(command){
         namespace = "/wvs_scan";
         var socket = io.connect(location.protocol+"//"+document.domain + ":" + location.port + namespace);
@@ -144,6 +179,7 @@
         start_agent_state_update()
         start_wvs_state_update()
         init_agent_state_table()
+        update_scan_btn_state()
         // add_wvs_agent_state(data)
     });
 
