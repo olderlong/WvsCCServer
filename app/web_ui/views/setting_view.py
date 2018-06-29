@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # _*_coding:utf-8 -*_
 import logging
-from flask import render_template,request,url_for,redirect
+from flask import render_template,request,url_for,redirect, make_response
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SelectField, SubmitField
 from wtforms.validators import DataRequired,IPAddress,URL
@@ -9,7 +9,8 @@ from wtforms.validators import DataRequired,IPAddress,URL
 from app.lib import msg_bus,common_msg
 from app.cli_ui import CliApp
 from app.web_ui.server_config import ServerConfig
-from app.web_ui.scan_session import ScanSetting, WVSState, AgentState,ScanResult
+from app.web_ui.scan_session import  WVSState, AgentState
+from app.web_ui.scan_task_manager import ScanSetting, ScanResult
 from app.server import AgentStateMonitor
 from app.web_ui.views import result_view as result_view
 
@@ -46,10 +47,14 @@ class ScanSettingForm(FlaskForm):
 
 def server_setting():
     server_setting_form = CCServerSettingForm()
+    scan_config_form = ScanSettingForm()
+
     if server_setting_form.is_submitted():
         ccserver_ip = server_setting_form.CCServerIP.data
         ccserver_port = server_setting_form.CCServerPort.data
         ccserver_protocol = server_setting_form.CCProtocol.data
+
+
 
         logger.info("控制服务器参数：(IP:{}, Port：{}, Protocol：{})".format(
             ccserver_ip,
@@ -57,9 +62,15 @@ def server_setting():
             ccserver_protocol
         ))
         cli_app = CliApp(ip=ccserver_ip, port=ccserver_port, protocol=ccserver_protocol)
+
+        rsp = make_response(render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form,
+                                            ScanSettingForm=scan_config_form))
+
         if request.form.get("submit_start") == u"启动控制服务器":
             cli_app.run()
 
+            # session["ServerState"] = "Started"
+            rsp.set_cookie('ServerState','Started')
             ScanResult().wvs_result_list.clear()
             msg_bus.add_msg_listener(common_msg.MSG_SCAN_RESULT_RECEIVE, result_view.scan_result_handler)
 
@@ -70,18 +81,23 @@ def server_setting():
                 ))
         elif request.form.get("submit_stop") == u"停止控制服务器":
             cli_app.stop()
-
+            # session["ServerState"] = "Stopped"
+            rsp.set_cookie('ServerState', 'Stopped')
             logger.info("控制服务器已停止：(IP:{}, Port：{}, Protocol：{})".format(
                 ccserver_ip,
                 ccserver_port,
                 ccserver_protocol
                 ))
 
-        return render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form,
-                               ScanSettingForm=ScanSettingForm())
+        # return redirect(url_for("setting"))
+        return rsp
+        # return render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form,
+        #                        ScanSettingForm=ScanSettingForm())
+
     else:
-        return render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form,
-                               ScanSettingForm=ScanSettingForm())
+        return redirect(url_for("setting"))
+        # return render_template("setting.html", title="配置中心", CCServerSettingForm=server_setting_form,
+        #                        ScanSettingForm=ScanSettingForm())
 
 
 def scan_setting():
