@@ -2,7 +2,16 @@
 
 {% block content %}
 <script>
-
+   function getCookie(cname){
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++){
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0)
+                return c.substring(name.length,c.length);
+        }
+        return "";
+    }
     function setCookie(cname,cvalue,exdays)
     {
       var d = new Date();
@@ -11,12 +20,17 @@
       document.cookie = cname + "=" + cvalue + "; " + expires;
     }
     function restart_scan(name) {
-
-        setCookie("ScanState", "Started", 1)
-        var url = window.location.href
-        console.log(url)
-        url = url+"/restart/"+ name
-        window.location = url
+        var server_state = getCookie("ServerState")
+        if (server_state == "Started") {
+            setCookie("ScanState", "Started", 1)
+            var url = window.location.href
+            console.log(url)
+            url = url + "/restart/" + name
+            window.location = url
+        }
+        else {
+            alert("服务器未启动")
+        }
     }
 </script>
 <h2>{{ title }}</h2>
