@@ -76,6 +76,18 @@
 
         $("tbody#wvs_result_table_body").append(new_result);
     }
+    function gen_report(){
+        var d = new Date()
+        // document.write(d.getTime() + " milliseconds since 1970/01/01")
+        var url = location.protocol+"//"+document.domain + ":" + location.port +"/report/"
+        console.log(url)
+        url = url+ d.getTime().toString()
+        window.location = url
+    }
+    function save_result(){
+        var url = location.protocol+"//"+document.domain + ":" + location.port +"/result/save"
+        window.location = url
+    }
     $(document).ready(function(){
         wvs_result_update()
         // add_wvs_agent_state(data)
@@ -99,12 +111,19 @@
                 </div>
             </div>
             <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6"><a href="javascript:void(0);" onclick=gen_report()>生成报告</a></div>
+                    <div class="col-lg-6"><a href="javascript:void(0);" onclick=save_result()>保存结果</a></div>
+                </div>
+
+
             </div>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-12">
+
     <hr/>
     </div>
 </div>
