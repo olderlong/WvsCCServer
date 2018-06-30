@@ -1,10 +1,10 @@
 #! /usr/bin/env python3
 # _*_coding:utf-8 -*_
 
-from flask import render_template,url_for,redirect
+from flask import render_template, url_for, redirect, session
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SelectField, SubmitField
-from wtforms.validators import DataRequired,IPAddress,URL
+from wtforms import StringField, SelectField, SubmitField
+from wtforms.validators import DataRequired, URL
 
 from app.web_ui.scan_task_manager import *
 from app.web_ui import app
@@ -22,8 +22,9 @@ task_info = {
 }
 task_manager = ScanTaskManager()
 
+
 def get_task_info_list():
-    task_manager = ScanTaskManager()
+    # task_manager = ScanTaskManager()
     task_list = task_manager.scan_task_list
     task_info_list = []
     if len(task_list):
@@ -35,6 +36,7 @@ def get_task_info_list():
             task_info_list.append(task_info_dict)
 
     return task_info_list
+
 
 class NewTaskForm(FlaskForm):
     Name = StringField("任务名称", validators=[DataRequired], default="Task_Name")
@@ -48,22 +50,27 @@ class NewTaskForm(FlaskForm):
     ], validators=[DataRequired],default=ScanSetting().scan_policy)
     submit = SubmitField('新建任务')
 
+
 @app.route("/task/new", endpoint="task_new", methods=('GET', 'POST'))
 def new_task():
     new_task_form = NewTaskForm()
     if new_task_form.is_submitted():
         task_name = new_task_form.Name.data
+        ScanSetting().set_scan_setting(new_task_form.StartURL.data, new_task_form.ScanPolicy.data, task_name)
         task_manager.add_new_task(task_name)
-        ScanSetting().set_scan_setting(new_task_form.StartURL.data, new_task_form.ScanPolicy.data)
+
         logger.info(ScanSetting().get_scan_setting())
         logger.info("新任务信息>>  任务名称:{},URL:{}, 策略:{}".format(task_name, new_task_form.StartURL.data,
                                                             new_task_form.ScanPolicy.data))
         ScanResult().clear_result_list()
         task_manager.save_task(task_name)
+        session["TaskName"] = task_name
         return redirect(url_for("task"))
+
 
 @app.route("/task/restart/<task_name>",endpoint="task_start", methods=('GET', 'POST'))
 def start_task(task_name):
+    session["TaskName"] = task_name
     if task_name:
         task_manager.get_task_info(task_name)
         ScanResult().wvs_result_list.clear()
@@ -87,16 +94,21 @@ def start_task(task_name):
 @app.route("/task/del/<task_name>", endpoint="task_delete", methods=('GET', 'POST'))
 def delete_task(task_name):
     if task_name:
+        logger.info("删除任务: {}".format(task_name))
+        logger.info("删除前任务: {}".format(task_manager.scan_task_list))
         task_manager.del_task(task_name)
         return redirect(url_for("task"))
         # return render_template("task.html", title="任务管理", task_info_list=get_task_info_list())
 
+
 @app.route("/task/<task_name>", endpoint="task_result", methods=('GET', 'POST'))
 def show_result(task_name):
+    session["TaskName"] = task_name
     if task_name:
         _,_, result_list = task_manager.get_task_info(task_name)
         logger.info(result_list)
         return render_template("result.html", title="扫描结果", scan_result_list=result_list)
+
 
 @app.route("/task", endpoint="task", methods=('GET', 'POST'))
 def task():
