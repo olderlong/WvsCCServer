@@ -49,13 +49,15 @@ class ScanSetting:
     def __init__(self, url="", policy="Normal"):
         self.start_url = url
         self.scan_policy = policy
+        self.scan_name = ""
 
     def get_scan_setting(self):
         return (self.start_url, self.scan_policy)
 
-    def set_scan_setting(self,url="", policy="Normal"):
+    def set_scan_setting(self,url="", policy="Normal",name="ScanName"):
         self.start_url = url
         self.scan_policy = policy
+        self.scan_name = name
 
 
 @singleton
@@ -86,7 +88,7 @@ class ScanResult:
     def clear_result_list(self):
         self.wvs_result_list.clear()
 
-
+@singleton
 class ScanTaskManager(object):
     def __init__(self, filepath=None):
         if filepath:
@@ -130,8 +132,6 @@ class ScanTaskManager(object):
         if not os.path.exists(task_path):
             os.mkdir(self.__gen_task_info_path(task_name))
             self.scan_task_list.append((task_name, time.time()))
-            ScanSetting("","Normal")
-            ScanResult().clear_result_list()
             return True
         else:
             logger.info("任务已存在，请更改任务名称!")
@@ -162,20 +162,23 @@ class ScanTaskManager(object):
         with open(self.scan_tasks_file, 'w') as wf:
             json.dump(task_dict, wf)
 
-    def del_task(self,task_name):
+    def del_task(self, task_name):
+        # logger.info("删除前任务_{}".format(self.scan_task_list))
         for task in self.scan_task_list:
             if task[0] == task_name:
+                logger.info("删除任务_{}".format(task_name))
                 task_path = self.__gen_task_info_path(task_name)
                 if os.path.exists(task_path):
-                    # os.removedirs(task_path)
                     shutil.rmtree(task_path)
+                    self.scan_task_list.remove(task)
                 else:
-                    logger.info("任务不存在，请更改任务名称!")
-                self.scan_task_list.remove(task)
-                self.save_task_list()
+                    logger.info("任务信息不存在，删除任务名称!")
+                    self.scan_task_list.remove(task)
                 break
-
-
+        # logger.info("删除后任务_{}".format(self.scan_task_list))
+        self.save_task_list()
+        ScanSetting().set_scan_setting("","Normal","")
+        ScanResult().clear_result_list()
 
     def get_last_task(self):
         return self.scan_task_list[::-1][0]
@@ -183,19 +186,7 @@ class ScanTaskManager(object):
 
 def main():
     m = ScanTaskManager()
-
     print(m.scan_tasks_file)
-    # task_name, _ = m.get_last_task()
-    # task_info = m.get_task_info(task_name)
-    #
-    # result = m.get_task_result(task_name)
-    # print(result)
-    #
-    # print(ScanSetting().get_scan_setting())
-    # print(ScanResult().get_scan_result())
-    #
-    # m.add_new_task("scan1")
-    # m.save_task()
 
 
 if __name__ == '__main__':
