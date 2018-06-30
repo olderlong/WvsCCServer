@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/site.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css" />
+    <script src="./js/jquery-3.3.1.js"></script>
+    <script src="./js/modernizr-2.6.2.js"></script>
+</head>
+<body>
+<div class="container body-content" width="80%">
+<div class="row">
+    <div class="col-lg-12">
+        <!-- col-lg-6 start here -->
+        <div class="panel panel-info toggle panelRefresh" id="spr_6">
+            <!-- Start .panel -->
+            <div class="panel-heading">
+                <h4 class="panel-title">扫描参数</h4>
+                <div class="panel-controls panel-controls-hide" style="display: none;"><a href="#" class="panel-refresh"><i class="im-spinner6"></i></a><a href="#" class="toggle panel-minimize"><i class="im-minus"></i></a></div></div>
+            <div class="panel-body"  style="margin: 0px; padding: 0px;">
+                <form action="#" class="form-horizontal" >
+                    <div class="form-group" style="margin: 0px; padding: 0px;" >
+                        <label class="col-lg-3 control-label" >扫描起始URL</label>
+                        <div class="col-lg-9">
+                            <label class="control-label">http://127.0.0.1</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin: 0px; padding: 0px;">
+                        <label class="col-lg-3 control-label">扫描策略</label>
+                        <div class="col-lg-9">
+                            <label class="control-label">Normal</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin: 0px; padding: 0px;">
+                        <label class="col-lg-3 control-label">&nbsp;</label>
+                        <div class="col-lg-9">
+                            <label class="control-label">&nbsp;</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 ">
+    <div class="panel panel-primary plain toggle panelClose panelRefresh" id="spr_1"  style="margin: 0px; padding: 0px;">
+                                <!-- Start .panel -->
+        <div class="panel-heading white-bg">
+            <h4 class="panel-title">扫描结果</h4>
+            <div class="panel-controls panel-controls-hide" style="display: none;">
+                <a href="#" class="panel-refresh"><i class="im-spinner6"></i></a>
+                <a href="#" class="toggle panel-minimize"><i class="im-minus"></i></a>
+                <a href="#" class="panel-close"><i class="im-close"></i></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: auto;">
+                <div class="table-responsive" style="overflow: hidden; width: 100%; height: auto;">
+                    <table class="table table-bordered table-hover" id="wvs_result_table" >
+                        <thead>
+                            <tr>
+                                <th  width="5%">#</th>
+                                <th class="per40" width="10%">漏洞类型</th>
+                                <th class="per15"  width="10%">漏洞URL</th>
+                                <th class="per15"  width="5%">漏洞级别</th>
+                                <th class="per15" width="70%">漏洞信息</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wvs_result_table_body">
+                        
+                                <tr class="active" id='Result_ASPNETCustomErrorPathDisc_http://192.168.3.10/zentao/theme/'>
+                                    <td>1</td>
+                                    <td>http://192.168.3.10/zentao/theme/</td>
+                                    <td>ASPNETCustomErrorPathDisc</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_1" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/zh-cn.default.css -&gt; /zentao/theme/~AppScan.aspx</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_ASPNETCustomErrorPathDisc_http://192.168.3.10/zentao/theme/default/images/main/'>
+                                    <td>2</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/images/main/</td>
+                                    <td>ASPNETCustomErrorPathDisc</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_2" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/images/main/zt-logo.png -&gt; /zentao/theme/default/images/main/~AppScan.aspx</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_ASPNETCustomErrorPathDisc_http://192.168.3.10/zentao/theme/default/images/'>
+                                    <td>3</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/images/</td>
+                                    <td>ASPNETCustomErrorPathDisc</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_3" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/images/main/zt-logo.png -&gt; /zentao/theme/default/images/~AppScan.aspx</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_OracleLogFileInformationDisclosure_http://192.168.3.10/zentao/js/'>
+                                    <td>4</td>
+                                    <td>http://192.168.3.10/zentao/js/</td>
+                                    <td>OracleLogFileInformationDisclosure</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_4" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Path:  /zentao/js/all.js -&gt; /zentao/js/sqlnet.log</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_OracleLogFileInformationDisclosure_http://192.168.3.10/zentao/theme/'>
+                                    <td>5</td>
+                                    <td>http://192.168.3.10/zentao/theme/</td>
+                                    <td>OracleLogFileInformationDisclosure</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_5" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/zh-cn.default.css -&gt; /zentao/theme/sqlnet.log</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_OracleLogFileInformationDisclosure_http://192.168.3.10/zentao/theme/default/'>
+                                    <td>6</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/</td>
+                                    <td>OracleLogFileInformationDisclosure</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_6" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/zh-cn.default.css -&gt; /zentao/theme/default/sqlnet.log</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_OracleLogFileInformationDisclosure_http://192.168.3.10/zentao/theme/default/images/'>
+                                    <td>7</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/images/</td>
+                                    <td>OracleLogFileInformationDisclosure</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_7" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/images/main/zt-logo.png -&gt; /zentao/theme/default/images/sqlnet.trc</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_OracleLogFileInformationDisclosure_http://192.168.3.10/zentao/theme/default/images/main/'>
+                                    <td>8</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/images/main/</td>
+                                    <td>OracleLogFileInformationDisclosure</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_8" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/images/main/zt-logo.png -&gt; /zentao/theme/default/images/main/sqlnet.log</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_cwvWS_FTP_Log_http://192.168.3.10/zentao/'>
+                                    <td>9</td>
+                                    <td>http://192.168.3.10/zentao/</td>
+                                    <td>cwvWS_FTP_Log</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_9" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Path:  /zentao/user-login-L3plbnRhby8=.html -&gt; /zentao/WS_FTP.LOG</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_cwvWS_FTP_Log_http://192.168.3.10/zentao/js/'>
+                                    <td>10</td>
+                                    <td>http://192.168.3.10/zentao/js/</td>
+                                    <td>cwvWS_FTP_Log</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_10" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Path:  /zentao/js/all.js -&gt; /zentao/js/WS_FTP.LOG</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_cwvWS_FTP_Log_http://192.168.3.10/zentao/theme/default/'>
+                                    <td>11</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/</td>
+                                    <td>cwvWS_FTP_Log</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_11" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/zh-cn.default.css -&gt; /zentao/theme/default/WS_FTP.LOG</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_cwvWS_FTP_Log_http://192.168.3.10/zentao/theme/'>
+                                    <td>12</td>
+                                    <td>http://192.168.3.10/zentao/theme/</td>
+                                    <td>cwvWS_FTP_Log</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_12" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/zh-cn.default.css -&gt; /zentao/theme/WS_FTP.LOG</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_cwvWS_FTP_Log_http://192.168.3.10/zentao/theme/default/images/main/'>
+                                    <td>13</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/images/main/</td>
+                                    <td>cwvWS_FTP_Log</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_13" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/images/main/zt-logo.png -&gt; /zentao/theme/default/images/main/WS_FTP.LOG</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_cwvWS_FTP_Log_http://192.168.3.10/zentao/theme/default/images/'>
+                                    <td>14</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/images/</td>
+                                    <td>cwvWS_FTP_Log</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_14" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/images/main/zt-logo.png -&gt; /zentao/theme/default/images/WS_FTP.LOG</td>
+                                                <td>响应包含服务器上文件的绝对路径和/或文件名。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_TargetBlankLink_http://192.168.3.10/'>
+                                    <td>15</td>
+                                    <td>http://192.168.3.10/</td>
+                                    <td>TargetBlankLink</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_15" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>None</td>
+                                                <td>带有 target=&#34;_blank&#34; 属性且不带有 rel=&#34;noopener noreferrer&#34; 属性的第三方链接允许链接的页面部分访问链接页面窗口对象</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                            <tr class="info">
+                                                <td>None</td>
+                                                <td>带有 target=&#34;_blank&#34; 属性且不带有 rel=&#34;noopener noreferrer&#34; 属性的第三方链接允许链接的页面部分访问链接页面窗口对象</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_TargetBlankLink_http://192.168.3.10/pro/api-getLicenses.html'>
+                                    <td>16</td>
+                                    <td>http://192.168.3.10/pro/api-getLicenses.html</td>
+                                    <td>TargetBlankLink</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_16" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>None</td>
+                                                <td>带有 target=&#34;_blank&#34; 属性且不带有 rel=&#34;noopener noreferrer&#34; 属性的第三方链接允许链接的页面部分访问链接页面窗口对象</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_GD_SourceCodeDisclosure_http://192.168.3.10/zentao/js/all.js'>
+                                    <td>17</td>
+                                    <td>http://192.168.3.10/zentao/js/all.js</td>
+                                    <td>GD_SourceCodeDisclosure</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_17" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>None</td>
+                                                <td>响应包含可能会泄露有关站点和应用程序逻辑的敏感信息的脚本文件源代码。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_PotentialOrderInformationFound_http://192.168.3.10/zentao/theme/default/images/'>
+                                    <td>18</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/images/</td>
+                                    <td>PotentialOrderInformationFound</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_18" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/images/main/zt-logo.png -&gt; /zentao/theme/default/images/order.htm</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_PotentialOrderInformationFound_http://192.168.3.10/zentao/theme/'>
+                                    <td>19</td>
+                                    <td>http://192.168.3.10/zentao/theme/</td>
+                                    <td>PotentialOrderInformationFound</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_19" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/zh-cn.default.css -&gt; /zentao/theme/order.txt</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_PotentialOrderInformationFound_http://192.168.3.10/zentao/js/'>
+                                    <td>20</td>
+                                    <td>http://192.168.3.10/zentao/js/</td>
+                                    <td>PotentialOrderInformationFound</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_20" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Path:  /zentao/js/all.js -&gt; /zentao/js/order.txt</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_PotentialOrderInformationFound_http://192.168.3.10/zentao/theme/default/images/main/'>
+                                    <td>21</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/images/main/</td>
+                                    <td>PotentialOrderInformationFound</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_21" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/images/main/zt-logo.png -&gt; /zentao/theme/default/images/main/order.html</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_PotentialOrderInformationFound_http://192.168.3.10/zentao/theme/default/'>
+                                    <td>22</td>
+                                    <td>http://192.168.3.10/zentao/theme/default/</td>
+                                    <td>PotentialOrderInformationFound</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_22" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Method:  HEAD -&gt; GET,Path:  /zentao/theme/default/zh-cn.default.css -&gt; /zentao/theme/default/order.txt</td>
+                                                <td>AppScan 请求的文件可能不是应用程序的合法部分。响应状态为“200 OK”。这表示测试成功检索了所请求的文件的内容。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_bodyParamsInQuery_http://192.168.3.10/zentao/user-login-L3plbnRhby8=.html'>
+                                    <td>23</td>
+                                    <td>http://192.168.3.10/zentao/user-login-L3plbnRhby8=.html</td>
+                                    <td>bodyParamsInQuery</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_23" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>BodyParameter:  account=1234 -&gt; account=,QueryParameter:  account= -&gt; account=1234,BodyParameter:  password=dbc458aab7430ab5049aed4d5aa03884 -&gt; password=,QueryParameter:  password= -&gt; password=dbc458aab7430ab5049aed4d5aa03884,BodyParameter:  referer=/zentao/ -&gt; referer=,QueryParameter:  referer= -&gt; referer=/zentao/,Method:  POST -&gt; GET</td>
+                                                <td>测试结果似乎指示存在脆弱性，因为“测试响应”与“原始响应”类似，这表明应用程序处理了查询总提交的主体参数。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_attDirectoryFound_http://192.168.3.10/com2/'>
+                                    <td>24</td>
+                                    <td>http://192.168.3.10/com2/</td>
+                                    <td>attDirectoryFound</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_24" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Path:  /pro/api-getLicenses.html -&gt; /com2/</td>
+                                                <td>测试尝试了检测服务器上的隐藏目录。403 Forbidden 响应暴露了存在此目录，即使不允许对其进行访问。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                                <tr class="active" id='Result_attDirectoryFound_http://192.168.3.10/aux/'>
+                                    <td>25</td>
+                                    <td>http://192.168.3.10/aux/</td>
+                                    <td>attDirectoryFound</td>
+                                    <td>Low</td>
+                                    <td>
+                                    <table class="table table-condensed table-hover" id="vul_detail_25" style="word-break:break-all; word-wrap:break-spaces;">
+                                        <thead>
+                                            <tr>
+                                                <th class="per40" width="40%">参数变异</th>
+                                                <th class="per15" width="40%">漏洞原因</th>
+                                                <th class="per15">CWE</th>
+                                                <th class="per15">CVE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <tr class="info">
+                                                <td>Path:  /pro/api-getLicenses.html -&gt; /aux/</td>
+                                                <td>测试尝试了检测服务器上的隐藏目录。403 Forbidden 响应暴露了存在此目录，即使不允许对其进行访问。</td>
+                                                <td>None</td>
+                                                <td>None</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                        </td>
+
+                                </tr>
+                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>
