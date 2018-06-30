@@ -1,8 +1,13 @@
 #! /usr/bin/env python
 # _*_coding:utf-8 -*_
 
-from flask import Flask
+from flask import Flask, session,g
 from flask_socketio import SocketIO
+
+
+class GlobalVar:
+    ServerState = "Stopped"
+    ScanState = "Stopped"
 
 
 def create_web_app():
@@ -17,6 +22,7 @@ async_mode = None
 socketio = SocketIO(app, async_mode=async_mode)
 
 
+
 from app.web_ui.views import *
 app.add_url_rule(rule="/", endpoint="index", view_func=index)
 # app.add_url_rule(rule="/task<action>", endpoint="task", view_func=task, methods=('GET', 'POST'))
@@ -25,6 +31,7 @@ app.add_url_rule(rule="/server_setting", endpoint="server_setting", view_func=se
 app.add_url_rule(rule="/scan_setting", endpoint="scan_setting", view_func=scan_setting, methods=('GET', 'POST'))
 app.add_url_rule(rule="/monitor", endpoint="monitor", view_func=monitor)
 app.add_url_rule(rule="/result", endpoint="result", view_func=result)
+# app.add_url_rule(rule="/report/<time>", endpoint="report", view_func=report)
 app.add_url_rule(rule="/readme", endpoint="readme", view_func=readme)
 
 
