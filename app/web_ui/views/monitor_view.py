@@ -1,13 +1,13 @@
 #! /usr/bin/env python
 # _*_coding:utf-8 -*_
 import logging
-from flask import render_template
-from app.web_ui import socketio
+from flask import render_template, make_response
+from app.web_ui import socketio, GlobalVar
 from app.lib import msg_bus, common_msg
 from app.web_ui.server_config import ServerConfig
 from app.web_ui.scan_session import WVSState, AgentState
 from app.web_ui.scan_task_manager import ScanSetting
-from app.server import AgentStateMonitor
+
 
 logger = logging.getLogger("Server")
 # agent_state_list = list(AgentStateMonitor().agent_state_dict.values())
@@ -20,15 +20,17 @@ def monitor():
     # server_config = ServerConfig()
     # scan_config = ScanSetting()
     logger.info(all_agent_state.get_agent_list())
-    return render_template(
+    rsp = make_response(render_template(
         "monitor.html",
         title="监控中心",
         server_config=ServerConfig(),
         scan_config=ScanSetting(),
         agent_state_list=all_agent_state.get_agent_list(),
         wvs_state_list=all_wvs_state.get_wvs_state_list()
-    )
+    ))
+    rsp.set_cookie('ScanState', GlobalVar.ScanState)
 
+    return rsp
 
 def ws_agent_state_send(msg):
     agent_state = msg.data
@@ -105,6 +107,8 @@ def wvs_scan_connect():
 def wvs_scan_control(data):
     command = data.get("Command")
     logger.info("Start scan with config: {}".format(command))
+    if GlobalVar.ServerState is "Stopped":
+        return
     if command == "start":
         setting = ScanSetting()
         start_scan_cmd = {
@@ -119,6 +123,7 @@ def wvs_scan_control(data):
         }
         common_msg.msg_server_command.data = start_scan_cmd
         msg_bus.send_msg(common_msg.msg_server_command)
+        GlobalVar.ScanState = "Started"
         logger.info("Start scan with config: {}".format(start_scan_cmd))
     elif command is "stop":
         stop_scan_cmd = {
@@ -129,4 +134,5 @@ def wvs_scan_control(data):
         }
         common_msg.msg_server_command.data = stop_scan_cmd
         msg_bus.send_msg(common_msg.msg_server_command)
-        logger.info("Start scan")
+        GlobalVar.ScanState = "Stopped"
+        logger.info("Stopped scan")
