@@ -147,11 +147,17 @@
     }
 
     var start_scan = function(){
-        console.log("Scan started")
-        setCookie("ScanState", "Started", 1)
-        $('button[id="btn_start_scan"]').attr("disabled","true")
-        $('button[id="btn_stop_scan"]').removeAttr("disabled")
-        ws_send_scan_control("start")
+        var server_state = getCookie("ServerState")
+        if (server_state=="Started"){
+            console.log("Scan started")
+            setCookie("ScanState", "Started", 1)
+            $('button[id="btn_start_scan"]').attr("disabled","true")
+            $('button[id="btn_stop_scan"]').removeAttr("disabled")
+            ws_send_scan_control("start")
+        }
+        else{
+            alert("服务器未启动")
+        }
     }
     var stop_scan = function(){
         var ret = confirm("是否停止？");
